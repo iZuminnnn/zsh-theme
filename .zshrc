@@ -1,8 +1,10 @@
-# Cấu hình lịch sử
-HISTFILE="${HOME}/.zsh_history"
-HISTSIZE=1000
+setopt APPEND_HISTORY
+setopt SHARE_HISTORY
+HISTFILE=$HOME/.zhistory
 SAVEHIST=1000
-setopt HIST_IGNORE_DUPS HIST_IGNORE_ALL_DUPS HIST_SAVE_NO_DUPS
+HISTSIZE=999
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt EXTENDED_HISTORY
 
 # Danh sách quotes và màu sắc
 troll_quotes=(
@@ -177,9 +179,6 @@ weather_icon() {
 # Prompt hooks
 preexec() { timer=$(( $(date +%s%0N) / 1000000 )); last_cmd="$1"; }
 precmd() {
-    local last_exit_code=$?
-    [[ $last_exit_code -eq 0 && -n $last_cmd ]] && troll_cmd "$last_cmd"
-    
     PS1="$(time_icon) %F{cyan}%n@%m %F{magenta}%~%f $(venv_info) $(git_info)
 %F{green}➜ %f"
     
@@ -188,22 +187,33 @@ precmd() {
         RPROMPT="%F{cyan}$((now-timer))ms%f"
         unset timer
     fi
-    cpu_troll
+    
+    # Loại bỏ cpu_troll vì tốn thời gian xử lý
     unset last_cmd
 }
 
 # Clear custom
 my_clear() {
     command clear
-	echo -e "\e[${troll_colors[RANDOM % ${#troll_colors[@]}]}m${troll_quotes[RANDOM % ${#troll_quotes[@]}]}\e[0m"
-    echo "Thời tiết hôm nay: $(weather_icon)"
+    # Sử dụng biến đã tính toán sẵn thay vì tính toán mỗi lần
+    local quote_index=$((RANDOM % ${#troll_quotes[@]}))
+    local color_index=$((RANDOM % ${#troll_colors[@]}))
+    echo -e "\e[${troll_colors[$color_index]}m${troll_quotes[$quote_index]}\e[0m"
+    # Không gọi weather_icon trong clear để tăng tốc
 }
 
 # Cấu hình cuối
 autoload -U colors && colors
 alias clear="my_clear"
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
 
-# Khởi tạo
-echo -e "\e[${troll_colors[RANDOM % ${#troll_colors[@]}]}m${troll_quotes[RANDOM % ${#troll_quotes[@]}]}\e[0m"
+# Loading zsh-autosuggestions
+if [[ -f ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+    source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+
+# Khởi tạo - tối ưu bằng cách tính toán trước để tránh lặp lại
+typeset -g startup_quote_index=$((RANDOM % ${#troll_quotes[@]}))
+typeset -g startup_color_index=$((RANDOM % ${#troll_colors[@]}))
+echo -e "\e[${troll_colors[$startup_color_index]}m${troll_quotes[$startup_quote_index]}\e[0m"
 echo "Thời tiết hôm nay: $(weather_icon)"
+
