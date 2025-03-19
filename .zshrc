@@ -301,7 +301,24 @@ if [[ -f ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
     source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
 
-# Khởi tạo - tối ưu bằng cách tính toán trước để tránh lặp lại
+# Khởi tạo - check update đầu tiên, sau đó mới hiển thị quotes và thời tiết
+{
+  # Get last update check time
+  LAST_UPDATE_CHECK_FILE="${HOME}/.zsh_update_check"
+  LAST_CHECK=0
+  [[ -f "$LAST_UPDATE_CHECK_FILE" ]] && LAST_CHECK=$(cat "$LAST_UPDATE_CHECK_FILE")
+  
+  CURRENT_DATE=$(date +%Y-%m-%d)
+  # Check if the date has changed
+  if [[ "$CURRENT_DATE" != "$LAST_CHECK" ]]; then
+    # Update timestamp first to prevent frequent checks
+    echo "$CURRENT_DATE" > "$LAST_UPDATE_CHECK_FILE"
+    # Check for updates first
+    update_zshrc
+  fi
+} 
+
+# Hiển thị quotes ngẫu nhiên
 typeset -g startup_quote_index=$((RANDOM % ${#troll_quotes[@]}))
 typeset -g startup_color_index=$((RANDOM % ${#troll_colors[@]}))
 echo -e "\e[${troll_colors[$startup_color_index]}m${troll_quotes[$startup_quote_index]}\e[0m"
