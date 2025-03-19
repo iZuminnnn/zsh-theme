@@ -6,6 +6,16 @@ HISTSIZE=999
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt EXTENDED_HISTORY
 
+troll_errors=(
+    "Lỗi rồi, code kiểu gì mà fail vậy người đẹp?"
+    "Sai lệnh rồi, gõ bằng chân hả người đẹp?"
+    "Exit code không 0, debug đi chứ đứng đó người đẹp!"
+    "Lệnh fail, chắc mạng lag hay tay lag người đẹp?"
+    "Lỗi đỏ màn hình, nghỉ xíu đi người đẹp!"
+    "Gõ sai rồi, mắt để đâu vậy người đẹp?"
+    "Command not found chắc luôn, tỉnh táo lại đi người đẹp!"
+)
+
 # Danh sách quotes và màu sắc
 troll_quotes=(
 	"Đã code gì chưa hay vẫn copy-paste người đẹp?"
@@ -144,11 +154,41 @@ time_icon() {
     esac
 }
 
+# Version for update checking
+ZSHRC_VERSION="1.0.0"
+
+# Function to check internet connection
+check_internet() {
+    local ping_cmd
+    case "$OSTYPE" in
+        darwin*|linux-gnu*)
+            # macOS or Linux
+            ping -c 1 google.com >/dev/null 2>&1 || 
+            ping -c 1 github.com >/dev/null 2>&1 || 
+            ping -c 1 1.1.1.1 >/dev/null 2>&1
+            ;;
+        msys*|cygwin*)
+            # Windows
+            ping -n 1 google.com >/dev/null 2>&1 || 
+            ping -n 1 github.com >/dev/null 2>&1 || 
+            ping -n 1 1.1.1.1 >/dev/null 2>&1
+            ;;
+        *)
+            # For other systems, try curl
+            curl --connect-timeout 2 -s https://google.com >/dev/null 2>&1 ||
+            curl --connect-timeout 2 -s https://github.com >/dev/null 2>&1 ||
+            curl --connect-timeout 2 -s https://1.1.1.1 >/dev/null 2>&1
+            ;;
+    esac
+    return $?
+}
+
 # Tối ưu weather
 typeset -g last_weather_update=0 cached_weather_icon="🌍 ?°C"
 weather_icon() {
     local current_time=$(date +%s)
-    if ((current_time - last_weather_update >= 300)); then
+    # Only update if it's been more than 5 minutes and we have internet
+    if ((current_time - last_weather_update >= 300)) && check_internet; then
 		local weather_data=$(curl -s "wttr.in?format=%C+%t&location=hanoi&lang=en" 2>/dev/null || echo "unknown+?°C")
 		local weather=$(echo "$weather_data" | cut -d' ' -f1)
 		local temp=$(echo "$weather_data" | cut -d'+' -f2)
@@ -172,12 +212,63 @@ weather_icon() {
             esac
         )
         last_weather_update=$current_time
+    elif ! check_internet && ((current_time - last_weather_update >= 1800)); then
+        # If no internet for 30 minutes, show offline message
+        cached_weather_icon="\e[90m📵 Không có kết nối mạng để cập nhật thời tiết\e[0m"
+        last_weather_update=$current_time
     fi
     echo -e "$cached_weather_icon"
 }
 
+# Function to check for and download zshrc updates
+update_zshrc() {
+    echo "Kiểm tra bản cập nhật cho .zshrc..."
+    if ! check_internet; then
+        echo -e "\e[91mKhông thể kết nối mạng. Vui lòng thử lại sau.\e[0m"
+        return 1
+    fi
+    
+    # Get remote version
+    local remote_version=$(curl -s https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/version.txt 2>/dev/null)
+    if [[ -z "$remote_version" ]]; then
+        echo -e "\e[91mKhông thể tải thông tin phiên bản.\e[0m"
+        return 1
+    fi
+    
+    # Compare versions (simple string comparison)
+    if [[ "$remote_version" != "$ZSHRC_VERSION" ]]; then
+        echo -e "\e[92mĐã phát hiện phiên bản mới: $remote_version (hiện tại: $ZSHRC_VERSION)\e[0m"
+        echo -e "Đang tải xuống bản cập nhật..."
+        
+        # Backup current file
+        cp ~/.zshrc ~/.zshrc.backup
+        
+        # Download new version
+        if curl -s -o ~/.zshrc https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.zshrc; then
+            echo -e "\e[92mCập nhật thành công! Đã sao lưu phiên bản cũ tại ~/.zshrc.backup\e[0m"
+            echo -e "Khởi động lại shell để áp dụng thay đổi, hoặc chạy: source ~/.zshrc"
+        else
+            echo -e "\e[91mCập nhật thất bại. Vui lòng thử lại sau.\e[0m"
+            # Restore backup
+            cp ~/.zshrc.backup ~/.zshrc
+        fi
+    else
+        echo -e "\e[92mBạn đang sử dụng phiên bản mới nhất ($ZSHRC_VERSION)\e[0m"
+    fi
+}
+
+# Add alias for easier updating
+alias update-zshrc="update_zshrc"
+
 # Prompt hooks
-preexec() { timer=$(( $(date +%s%0N) / 1000000 )); last_cmd="$1"; }
+preexec() { 
+    timer=$(( $(date +%s%0N) / 1000000 )); 
+    last_cmd="$1";
+    # Thêm gọi troll_cmd khi thực thi lệnh
+    troll_message=$(troll_cmd "$last_cmd")
+    [[ -n "$troll_message" ]] && echo "$troll_message"
+}
+
 precmd() {
     PS1="$(time_icon) %F{cyan}%n@%m %F{magenta}%~%f $(venv_info) $(git_info)
 %F{green}➜ %f"
@@ -215,5 +306,25 @@ fi
 typeset -g startup_quote_index=$((RANDOM % ${#troll_quotes[@]}))
 typeset -g startup_color_index=$((RANDOM % ${#troll_colors[@]}))
 echo -e "\e[${troll_colors[$startup_color_index]}m${troll_quotes[$startup_quote_index]}\e[0m"
-echo "Thời tiết hôm nay: $(weather_icon)"
 
+# Only show weather if we have internet
+if check_internet; then
+    echo "Thời tiết hôm nay: $(weather_icon)"
+fi
+
+# Check for updates once a day (but don't block startup)
+{
+  # Get last update check time
+  LAST_UPDATE_CHECK_FILE="${HOME}/.zsh_update_check"
+  LAST_CHECK=0
+  [[ -f "$LAST_UPDATE_CHECK_FILE" ]] && LAST_CHECK=$(cat "$LAST_UPDATE_CHECK_FILE")
+  
+  CURRENT_DATE=$(date +%Y-%m-%d)
+  # Check if the date has changed
+  if [[ "$CURRENT_DATE" != "$LAST_CHECK" ]]; then
+    # Update timestamp first to prevent frequent checks
+    echo "$CURRENT_DATE" > "$LAST_UPDATE_CHECK_FILE"
+    # Quietly check for updates in the background
+    (update_zshrc > /dev/null 2>&1 &)
+  fi
+} &>/dev/null
