@@ -5,6 +5,8 @@ SAVEHIST=1000
 HISTSIZE=999
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt EXTENDED_HISTORY
+# Version for update checking
+ZSHRC_VERSION="0.0.4"
 
 # Danh sách quotes và màu sắc
 troll_quotes=(
@@ -144,30 +146,21 @@ time_icon() {
     esac
 }
 
-# Version for update checking
-ZSHRC_VERSION="1.0.0"
-
 # Function to check internet connection
 check_internet() {
     local ping_cmd
     case "$OSTYPE" in
         darwin*|linux-gnu*)
             # macOS or Linux
-            ping -c 1 google.com >/dev/null 2>&1 || 
-            ping -c 1 github.com >/dev/null 2>&1 || 
-            ping -c 1 1.1.1.1 >/dev/null 2>&1
+            ping -c 1 github.com >/dev/null 2>&1
             ;;
         msys*|cygwin*)
             # Windows
-            ping -n 1 google.com >/dev/null 2>&1 || 
-            ping -n 1 github.com >/dev/null 2>&1 || 
-            ping -n 1 1.1.1.1 >/dev/null 2>&1
+            ping -n 1 github.com >/dev/null 2>&1
             ;;
         *)
             # For other systems, try curl
-            curl --connect-timeout 2 -s https://google.com >/dev/null 2>&1 ||
-            curl --connect-timeout 2 -s https://github.com >/dev/null 2>&1 ||
-            curl --connect-timeout 2 -s https://1.1.1.1 >/dev/null 2>&1
+            curl --connect-timeout 2 -s https://github.com >/dev/null 2>&1
             ;;
     esac
     return $?
@@ -285,7 +278,23 @@ my_clear() {
 
 # Cấu hình cuối
 autoload -U colors && colors
+
 alias clear="my_clear"
+bindkey '^[[1;5D' backward-word
+bindkey '^[[1;5C' forward-word
+bindkey '^[[3~' delete-char
+bindkey '^[[H' beginning-of-line
+bindkey '^[[F' end-of-line
+bindkey '^[[5~' history-search-backward
+bindkey '^[[6~' history-search-forward
+bindkey '^[[A' up-line-or-search
+bindkey '\C-h' backward-kill-word
+# Xóa nhanh toàn bộ dòng (trước và sau con trỏ)
+bindkey '^U' backward-kill-line  # Ctrl + U: Xóa từ con trỏ về đầu dòng  
+bindkey '^K' kill-line           # Ctrl + K: Xóa từ con trỏ về cuối dòng 
+# Di chuyển đầu/cuối dòng  
+bindkey '^[a' beginning-of-line   # Alt + A: Nhảy về đầu dòng  
+bindkey '^[e' end-of-line         # Alt + E: Nhảy về cuối dòng  
 
 # Loading zsh-autosuggestions
 if [[ -f ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
