@@ -291,7 +291,7 @@ my_clear() {
     if check_internet; then
       echo "Thời tiết hôm nay: $(weather_icon)"
     fi
-    # echo "$(troll_by_time)"
+    echo "$(troll_by_time)"
 }
 
 # Cấu hình cuối
