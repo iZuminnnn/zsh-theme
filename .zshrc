@@ -83,12 +83,22 @@ troll_cmd() {
         *git\ commit*) message="Đã commit gì chưa hay để quên -m người đẹp?" color=93 ;;
         *git\ push*) message="Đã push thật chưa hay mạng lag người đẹp?" color=94 ;;
         *git\ st*|*git\ status*) message="Status check hoài, code đâu mà xem người đẹp?" color=92 ;;
+        *git\ pull*) message="Đã pull chưa hay lại conflict sml người đẹp?" color=91 ;;
+        *git\ merge*) message="Merge gì đó? Có test kỹ chưa hay chờ drama người đẹp?" color=95 ;;
+        *git\ rebase*) message="Rebase đấy à? Có chắc là không quạo không người đẹp?" color=96 ;;
         *python*) message="Đã debug Python chưa hay print mãi người đẹp?" color=95 ;;
-        *npm*) message="Đã node_modules gì chưa hay đơ máy người đẹp?" color=91 ;;
-        *rm*) message="Đã xóa gì chưa hay lỡ tay xóa luôn code người đẹp?" color=96 ;;
+        *pip*) message="Pip install xong nhớ kiểm tra version người đẹp?" color=92 ;;
+        *npm\ install*) message="npm install đấy à? Lần này có node_modules không người đẹp?" color=91 ;;
+        *npm\ start*) message="Chạy thử chưa hay lại lỗi đỏ màn hình người đẹp?" color=94 ;;
+        *rm\ -rf*) message="Xóa gì đó? Có chắc không hay tí nữa lại khóc người đẹp?" color=96 ;;
+        *cd*) message="Đi đâu đó? Có chắc là đúng folder không người đẹp?" color=93 ;;
+        *ls*) message="Tìm gì đó? Hay lại gõ nhầm đường dẫn người đẹp?" color=92 ;;
+        *docker\ build*) message="Build Docker xong nhớ test container người đẹp?" color=94 ;;
+        *docker\ run*) message="Chạy container rồi có chắc nó không chết yểu không người đẹp?" color=95 ;;
+        *sudo*) message="Sudo đó à? Cẩn thận lệnh nguy hiểm người đẹp?" color=91 ;;
         *) return ;;
     esac
-    echo "\e[${color}m${message}\e[0m"
+    echo -e "\e[${color}m${message}\e[0m"
 }
 
 # Các hàm thông tin
