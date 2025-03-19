@@ -7,78 +7,84 @@ setopt HIST_EXPIRE_DUPS_FIRST
 setopt EXTENDED_HISTORY
 # Version for update checking
 ZSHRC_VERSION="0.0.4"
-
-# Danh sách quotes và màu sắc
-troll_quotes=(
-	"Đã code gì chưa hay vẫn copy-paste người đẹp?"
-	"Đã debug gì chưa hay đổ lỗi cho intern người đẹp?"
-	"Đã commit gì chưa hay để git blame người đẹp?"
-	"Đã fix bug gì chưa hay thêm bug mới người đẹp?"
-	"Đã push gì chưa hay sợ CI fail người đẹp?"
-	"Đã pull request gì chưa hay chờ merge conflict người đẹp?"
-	"Đã refactor gì chưa hay code như hạch người đẹp?"
-	"Đã unit test gì chưa hay cầu trời chạy người đẹp?"
-	"Đã deploy gì chưa hay server crash người đẹp?"
-	"Đã Stack Overflow gì chưa hay tự nghĩ người đẹp?"
-	"Đã comment code gì chưa hay để người ta đoán người đẹp?"
-	"Đã họp team gì chưa hay ngủ gật người đẹp?"
-	"Đã deadline gì chưa hay vẫn nước đến chân người đẹp?"
-	"Đã clean code gì chưa hay toàn spaghetti người đẹp?"
-	"Đã học framework gì chưa hay vẫn console.log người đẹp?"
-	"Đã hỏi ChatGPT gì chưa hay tự code người đẹp?"
-	"Đã fix lỗi 404 gì chưa hay để 500 người đẹp?"
-	"Đã overtime gì chưa hay 5h về người đẹp?"
-	"Đã code review gì chưa hay toàn LGTM người đẹp?"
-	"Đã production gì chưa hay vẫn localhost người đẹp?"
-)
-troll_colors=(91 92 93 94 95 96)
+troll_colors=(91 92 93 94 95 96) # red green yellow blue magenta cyan
 
 # Tối ưu troll theo thời gian
 troll_by_time() {
     local hour=$(date +%H)
-    local random_color=${troll_colors[RANDOM % ${#troll_colors[@]}]}
+    local minute=$(date +%M)
+    
+    # Đặt seed cho RANDOM dựa trên thời gian hiện tại (số giây từ epoch)
+    RANDOM=$(date +%s)  # Dùng số giây từ epoch làm seed
+    
+    local random_color=${troll_colors[$((RANDOM % ${#troll_colors[@]}))]}
     local message
-    case $hour in
-        0[0-5]) message="Đã code gì chưa hay mắt còn cay giờ này người đẹp?" ;;
-        0[6-9]|1[0-1]) message="Đã cà phê gì chưa hay vẫn gà gật người đẹp?" ;;
-        1[2-7]) message="Đã deadline gì chưa hay vẫn chill người đẹp?" ;;
-        *) message="Đã ngủ gì chưa hay ôm bug khuya người đẹp?" ;;
-    esac
-    echo "\e[${random_color}m${message}\e[0m"
+    local messages
+
+    # Check if within 16:30-18:30
+    local force_show=false
+    if [[ ("$hour" == 16 && "$minute" -ge 30) || ("$hour" == 17) || ("$hour" == 18 && "$minute" -le 30) ]]; then
+        force_show=true
+    fi
+
+    # Luôn hiển thị thông điệp khi gọi hàm (bỏ logic xác suất 10% để test dễ hơn)
+    if [[ "$force_show" == true ]]; then
+        messages=(
+            "Muộn rồi đó má! Code ít thôi, về đi kẻo người ta chờ cơm nguội bây giờ!"
+            "Giờ này còn ngồi code chi nữa? Công ty có bao cổ phần đâu mà cống hiến dữ vậy!"
+            "Về đi chứ! Bug thì fix hoài không hết, nhưng thanh xuân mà hết rồi là khỏi fix!"
+            "Bắt đầu tắt máy đi, đừng để hôm nay lại thành một ngày OT vô nghĩa nữa!"
+            "Deadline quan trọng nhưng người đợi cơm còn quan trọng hơn!"
+            "Tắt máy ngay! Đi về hôn người yêu, ôm con, ăn cơm! Đừng để về nhà chỉ thấy... con mèo!"
+            "Ngồi lại muộn thêm chút nữa là công ty in luôn tên lên bàn phím đấy, về đi!"
+            "Còn ngồi đó hả? Về lẹ đi, đừng để ngày mai công ty phát luôn gối ôm với chăn mền cho tiện!"
+            "Gõ phím hoài không chán hả? Về đi ông ơi, chứ bàn phím nó mòn thì còn thay được, chứ thanh xuân mòn là khỏi sửa!"
+            "Về đi! Đừng để hôm nay thành một ngày OT vô nghĩa, mà lương thì vẫn vậy!"
+            "Ngồi code thêm chút nữa là mai HR gửi luôn hợp đồng thuê công ty làm nhà ở đó!"
+            "Máy tính không cần nghỉ, nhưng ông thì có đó nha! Tắt máy ngay!"
+            "Bug fix hoài không hết, nhưng deadline cuộc đời thì tới nhanh lắm, về đi ông ơi!"
+            "Ngồi lại chút nữa là công ty khắc tên ông lên ghế luôn đó, về đi chứ còn gì nữa!"
+            "Về đi chứ? Công ty có cổ phần cho ông đâu mà cống hiến dữ vậy!"
+            "Gõ phím ít thôi, còn để dành sức mà nắm tay người thương nữa chứ!"
+            "Về lẹ đi! Đừng để về nhà chỉ thấy... con mèo nhìn ông với ánh mắt đầy thương hại!"
+            "Ông còn gõ phím nữa là cái bàn phím nó kiện ông lên công đoàn đó!"
+            "Về đi! Đừng để ngày mai đồng nghiệp tưởng ông là nhân viên bảo vệ ca đêm!"
+            "OT hoài không làm ông giàu lên đâu, nhưng chắc chắn làm ông già đi!"
+            "Máy tính thì có thể nâng cấp, nhưng cột sống ông mà hỏng thì chịu luôn!"
+            "Code mãi không xong thì mai code tiếp, chứ mất ngủ là mai khỏi code luôn!"
+            "Sếp không thấy ông OT đâu, nhưng bác sĩ thần kinh thì sắp thấy đó!"
+            "Về đi chứ? Hay định debug luôn cả cuộc đời?"
+            "Bug có thể chờ, nhưng người yêu ông thì không đâu!"
+            "Về lẹ đi! Đừng để hôm sau đi làm với đôi mắt thâm hơn cả dark mode!"
+            "Công ty không đóng cửa, nhưng quán cơm ông hay ăn thì sắp đóng rồi đó!"
+            "Fix bug xong chưa? Chưa thì mai fix tiếp, chứ về trễ nữa là chỉ còn mỗi bug làm bạn!"
+            "Ngồi thêm tí nữa là mai HR phát luôn huy chương 'nhân viên kiên trì' cho ông đó!"
+            "Deadline dí cũng không nhanh bằng tuổi xuân trôi đâu, về lẹ còn kịp!"
+        )
+
+    else
+        case $hour in
+            00|01) messages=("Giờ này còn thức làm gì đấy? Định hẹn hò với bug xuyên đêm à?" "Ngủ sớm đi má, chứ code khuya dễ commit mấy dòng regret lắm!") ;;
+            02|03) messages=("Ủa, thức khuya vậy? Có phải đang debug một lỗi mà Google cũng từ chối trả lời không?" "Giờ này vẫn còn code là trình cao thủ lắm nha!") ;;
+            04|05) messages=("Trời sắp sáng rồi, ngủ chưa hay đang luyện công phu 'bug bám dai'?" "Gà gáy rồi mà bug vẫn chưa chịu đi ngủ hả?") ;;
+            06|07) messages=("Dậy chưa? Hay là vẫn quấn chăn trong khi bug đang chờ kìa!" "Sáng rồi, mở VS Code hay mở bát trước đây?") ;;
+            08|09) messages=("Cà phê sáng chưa? Hay vẫn đang nạp caffeine bằng stackoverflow?" "Bữa sáng nay có gì? Đừng nói lại là 'fix bug' nhé!") ;;
+            10|11) messages=("Tầm này chắc vẫn đang họp đúng không? 'Nói ít code nhiều' nhớ!" "Công việc ổn không? Hay là tâm trạng còn hỗn loạn hơn git merge?") ;;
+            12|13) messages=("Ăn trưa chưa? Hay lại định sống bằng niềm tin vào deadline?" "Bug có nghỉ trưa không? Không! Vậy nên dev cũng không!") ;;
+            14|15) messages=("Tầm này dễ đơ người lắm, mà code đơ còn nhanh hơn dev!" "Trà chiều chưa? Hay còn bận fix bug mà chưa nhấp môi giọt nào?") ;;
+            16|17) messages=("Chiều rồi, năng lượng vẫn còn hay đã tụt mood theo bug?" "Code chiều hay dễ dính bug, cẩn thận kẻo sáng mai fix không kịp!") ;;
+            18|19) messages=("Giờ này dev đang code hay đang nhậu?" "Cẩn thận nhé, code ban tối dễ commit dòng regret lắm!") ;;
+            20|21) messages=("Nay có định chơi game tí cho đỡ stress không hay lại ôm bug cả tối?" "Code xong rồi thì nghỉ ngơi tí đi! Đừng để bug cướp luôn tuổi trẻ!") ;;
+            22|23) messages=("Giờ này vẫn còn cày à? Tí nữa ngủ luôn trên bàn phím cho coi!" "Làm dev kiểu này mai dậy là thành zombie nhé!") ;;
+            *) messages=("Giờ giấc kỳ lạ quá! Không biết gọi là sáng, trưa, chiều hay tối nữa!") ;;
+        esac
+    fi
+
+    # Chọn ngẫu nhiên một thông báo từ danh sách
+    message=${messages[$((RANDOM % ${#messages[@]}))]}
+    echo -e "\e[95m${message}\e[0m"
 }
 
-# Tối ưu CPU troll
-cpu_troll() {
-    local cpu_usage num_cores
-    case "$OSTYPE" in
-        darwin*)
-            cpu_usage=$(ps -A -o %cpu | awk 'NR>1{s+=$1} END{print int(s)}')
-            num_cores=$(sysctl -n hw.ncpu)
-            ;;
-        linux-gnu*)
-            cpu_usage=$(ps aux | awk '{s+=$3} END{print int(s)}')
-            num_cores=$(nproc 2>/dev/null || echo 1)
-            ;;
-        msys*|cygwin*)
-            cpu_usage=$(wmic cpu get LoadPercentage | awk 'NR==2{print $1}' 2>/dev/null || powershell -command "(Get-Counter '\Processor(_Total)\% Processor Time').CounterSamples.CookedValue" 2>/dev/null)
-            num_cores=$(wmic cpu get NumberOfCores | awk 'NR==2{print $1}' 2>/dev/null || powershell -command "(Get-WmiObject Win32_ComputerSystem).NumberOfLogicalProcessors" 2>/dev/null)
-            ;;
-        *) return ;;
-    esac
-    
-    [[ -z "$cpu_usage" || -z "$num_cores" ]] && cpu_usage=0
-    [[ "$OSTYPE" != "msys" && "$OSTYPE" != "cygwin" ]] && cpu_usage=$((cpu_usage / num_cores))
-    
-    if ((cpu_usage > 70)); then
-        local troll_cpu=(
-            "Máy nóng thế, code gì mà căng vậy người đẹp?"
-            "CPU đỏ rồi, nghỉ tay đi người đẹp!"
-            "Code kiểu gì mà máy muốn nổ vậy người đẹp?"
-            "70% CPU, chắc đào coin chứ code gì nổi người đẹp?"
-        )
-        echo -e "\e[92m${troll_cpu[RANDOM % ${#troll_cpu[@]}]}\e[0m"
-    fi
-}
 
 # Tối ưu troll command
 troll_cmd() {
@@ -242,12 +248,25 @@ update_zshrc() {
 
 # Add alias for easier updating
 alias update-zshrc="update_zshrc"
-
+last_troll_time=0
+troll_interval=$((5 * 60))  # 5 phút
 # Prompt hooks
-preexec() { 
-    timer=$(( $(date +%s%0N) / 1000000 )); 
-    last_cmd="$1";
-    # Thêm gọi troll_cmd khi thực thi lệnh
+
+preexec() {
+    timer=$(( $(date +%s%0N) / 1000000 ))
+    last_cmd="$1"
+
+    # Gọi troll_by_time chỉ sau mỗi khoảng thời gian nhất định
+    current_time=$(date +%s)
+    if (( current_time - last_troll_time >= troll_interval )); then
+        troll_time_message=$(troll_by_time)
+        echo "$troll_time_message"
+        last_troll_time=$current_time
+    fi
+    # troll_time_message=$(troll_by_time)
+    # echo "$troll_time_message"  # Luôn hiển thị, không cần kiểm tra rỗng
+
+    # Gọi troll_cmd
     troll_message=$(troll_cmd "$last_cmd")
     [[ -n "$troll_message" ]] && echo "$troll_message"
 }
@@ -269,11 +288,10 @@ precmd() {
 # Clear custom
 my_clear() {
     command clear
-    # Sử dụng biến đã tính toán sẵn thay vì tính toán mỗi lần
-    local quote_index=$((RANDOM % ${#troll_quotes[@]}))
-    local color_index=$((RANDOM % ${#troll_colors[@]}))
-    echo -e "\e[${troll_colors[$color_index]}m${troll_quotes[$quote_index]}\e[0m"
-    # Không gọi weather_icon trong clear để tăng tốc
+    if check_internet; then
+      echo "Thời tiết hôm nay: $(weather_icon)"
+    fi
+    # echo "$(troll_by_time)"
 }
 
 # Cấu hình cuối
@@ -311,6 +329,7 @@ fi
   CURRENT_DATE=$(date +%Y-%m-%d)
   # Check if the date has changed
   if [[ "$CURRENT_DATE" != "$LAST_CHECK" ]]; then
+    echo -e "\e[93mChúc người đẹp một ngày mới tràn đầy năng lượng nhé! Happy coding😘\e[0m"
     # Update timestamp first to prevent frequent checks
     echo "$CURRENT_DATE" > "$LAST_UPDATE_CHECK_FILE"
     # Check for updates first
@@ -318,29 +337,8 @@ fi
   fi
 } 
 
-# Hiển thị quotes ngẫu nhiên
-typeset -g startup_quote_index=$((RANDOM % ${#troll_quotes[@]}))
-typeset -g startup_color_index=$((RANDOM % ${#troll_colors[@]}))
-echo -e "\e[${troll_colors[$startup_color_index]}m${troll_quotes[$startup_quote_index]}\e[0m"
-
 # Only show weather if we have internet
 if check_internet; then
     echo "Thời tiết hôm nay: $(weather_icon)"
 fi
-
-# Check for updates once a day (but don't block startup)
-{
-  # Get last update check time
-  LAST_UPDATE_CHECK_FILE="${HOME}/.zsh_update_check"
-  LAST_CHECK=0
-  [[ -f "$LAST_UPDATE_CHECK_FILE" ]] && LAST_CHECK=$(cat "$LAST_UPDATE_CHECK_FILE")
-  
-  CURRENT_DATE=$(date +%Y-%m-%d)
-  # Check if the date has changed
-  if [[ "$CURRENT_DATE" != "$LAST_CHECK" ]]; then
-    # Update timestamp first to prevent frequent checks
-    echo "$CURRENT_DATE" > "$LAST_UPDATE_CHECK_FILE"
-    # Quietly check for updates in the background
-    (update_zshrc > /dev/null 2>&1 &)
-  fi
-} &>/dev/null
+echo "$(troll_by_time)"
