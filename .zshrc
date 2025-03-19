@@ -6,16 +6,6 @@ HISTSIZE=999
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt EXTENDED_HISTORY
 
-troll_errors=(
-    "Lỗi rồi, code kiểu gì mà fail vậy người đẹp?"
-    "Sai lệnh rồi, gõ bằng chân hả người đẹp?"
-    "Exit code không 0, debug đi chứ đứng đó người đẹp!"
-    "Lệnh fail, chắc mạng lag hay tay lag người đẹp?"
-    "Lỗi đỏ màn hình, nghỉ xíu đi người đẹp!"
-    "Gõ sai rồi, mắt để đâu vậy người đẹp?"
-    "Command not found chắc luôn, tỉnh táo lại đi người đẹp!"
-)
-
 # Danh sách quotes và màu sắc
 troll_quotes=(
 	"Đã code gì chưa hay vẫn copy-paste người đẹp?"
