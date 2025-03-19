@@ -6,7 +6,7 @@ HISTSIZE=999
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt EXTENDED_HISTORY
 # Version for update checking
-ZSHRC_VERSION="0.0.4"
+ZSHRC_VERSION="0.0.6"
 troll_colors=(91 92 93 94 95 96) # red green yellow blue magenta cyan
 
 # Tối ưu troll theo thời gian
