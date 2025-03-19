@@ -80,22 +80,49 @@ cpu_troll() {
 troll_cmd() {
     local cmd="$1" message color
     case "$cmd" in
-        *git\ commit*) message="Đã commit gì chưa hay để quên -m người đẹp?" color=93 ;;
-        *git\ push*) message="Đã push thật chưa hay mạng lag người đẹp?" color=94 ;;
-        *git\ st*|*git\ status*) message="Status check hoài, code đâu mà xem người đẹp?" color=92 ;;
-        *git\ pull*) message="Đã pull chưa hay lại conflict sml người đẹp?" color=91 ;;
-        *git\ merge*) message="Merge gì đó? Có test kỹ chưa hay chờ drama người đẹp?" color=95 ;;
-        *git\ rebase*) message="Rebase đấy à? Có chắc là không quạo không người đẹp?" color=96 ;;
-        *python*) message="Đã debug Python chưa hay print mãi người đẹp?" color=95 ;;
-        *pip*) message="Pip install xong nhớ kiểm tra version người đẹp?" color=92 ;;
-        *npm\ install*) message="npm install đấy à? Lần này có node_modules không người đẹp?" color=91 ;;
-        *npm\ start*) message="Chạy thử chưa hay lại lỗi đỏ màn hình người đẹp?" color=94 ;;
-        *rm\ -rf*) message="Xóa gì đó? Có chắc không hay tí nữa lại khóc người đẹp?" color=96 ;;
-        *cd*) message="Đi đâu đó? Có chắc là đúng folder không người đẹp?" color=93 ;;
-        *ls*) message="Tìm gì đó? Hay lại gõ nhầm đường dẫn người đẹp?" color=92 ;;
-        *docker\ build*) message="Build Docker xong nhớ test container người đẹp?" color=94 ;;
-        *docker\ run*) message="Chạy container rồi có chắc nó không chết yểu không người đẹp?" color=95 ;;
-        *sudo*) message="Sudo đó à? Cẩn thận lệnh nguy hiểm người đẹp?" color=91 ;;
+        *git\ commit*) message="Commit xong rồi thì nhớ push người đẹp!" color=93 ;;
+        *git\ push*) message="Push thành công rồi, nghỉ xíu uống miếng nước người đẹp!" color=94 ;;
+        *git\ st*|*git\ status*) message="Check status hoài, nhìn thấy thành quả chưa người đẹp?" color=92 ;;
+        *git\ pull*) message="Pull code về rồi, nhớ test kỹ người đẹp!" color=91 ;;
+        *git\ merge*) message="Merge xong nhớ đọc log nha người đẹp!" color=95 ;;
+        *git\ rebase*) message="Rebase xong nhìn lại lịch sử commit có đẹp không người đẹp?" color=96 ;;
+        *git\ log*) message="Đọc log có thấy lỗi ai gây ra không người đẹp?" color=93 ;;
+        *git\ diff*) message="Xem diff đi, có gì bất ngờ không người đẹp?" color=92 ;;
+        *git\ reset*) message="Reset nhẹ tay thôi người đẹp, đừng để mất công sức nha!" color=91 ;;
+        *git\ cherry-pick*) message="Chọn commit kỹ nha người đẹp, đừng pick nhầm drama!" color=95 ;;
+        *python*) message="Python thần thánh, chạy thử coi output đẹp chưa người đẹp!" color=95 ;;
+        *pip*) message="Pip install xong rồi, dependencies đủ chưa người đẹp?" color=92 ;;
+        *npm\ install*) message="npm install xong rồi, nhớ chạy thử coi chạy mượt không người đẹp!" color=91 ;;
+        *npm\ start*) message="Server khởi động rồi, kiểm tra UI chưa người đẹp?" color=94 ;;
+        *npm\ run\ build*) message="Build xong, lên production chưa người đẹp?" color=95 ;;
+        *yarn*) message="Dùng yarn à? Developer có gu nha người đẹp!" color=93 ;;
+        *rm\ -rf*) message="Xóa xong nhớ kiểm tra, đừng để mất gì quan trọng nha người đẹp!" color=96 ;;
+        *mv*) message="Di chuyển file cẩn thận nha người đẹp, đừng để mất dấu!" color=92 ;;
+        *cp*) message="Copy xong nhớ check lại, đừng để thiếu người đẹp!" color=94 ;;
+        *cd*) message="Đi đúng thư mục rồi chứ? Làm việc hiệu quả nha người đẹp!" color=93 ;;
+        *ls*) message="Danh sách file đây, cần gì cứ gọi anh người đẹp!" color=92 ;;
+        *cat*) message="Mở file ra rồi, đọc hiểu hết chưa người đẹp?" color=94 ;;
+        *vim*) message="Vào Vim rồi, nhớ cách thoát chưa người đẹp? 😆" color=91 ;;
+        *nano*) message="Dùng nano à? Gọn nhẹ dễ dùng nè người đẹp!" color=95 ;;
+        *docker\ build*) message="Docker build xong rồi, giờ chạy thử nha người đẹp!" color=94 ;;
+        *docker\ run*) message="Container chạy rồi, mở terminal check thử nha người đẹp!" color=95 ;;
+        *docker\ ps*) message="Xem container kìa, có chạy mượt không người đẹp?" color=92 ;;
+        *docker\ stop*) message="Dừng container rồi, có định bật lại không người đẹp?" color=91 ;;
+        *sudo*) message="Sudo thần thánh, cẩn thận quyền lực tối cao nha người đẹp!" color=91 ;;
+        *chmod*) message="Set quyền xong rồi, test lại nha người đẹp!" color=93 ;;
+        *chown*) message="Chuyển quyền sở hữu rồi, có đúng chủ chưa người đẹp?" color=94 ;;
+        *scp*) message="Chuyển file qua SSH nè, hy vọng nhanh gọn người đẹp!" color=92 ;;
+        *rsync*) message="Đồng bộ file rồi, đừng để thiếu gì nha người đẹp!" color=95 ;;
+        *kill*) message="Kill process rồi, có chắc nó không chạy lại không người đẹp?" color=91 ;;
+        *ps\ aux*) message="Danh sách process đây, tìm thủ phạm ngốn CPU chưa người đẹp?" color=93 ;;
+        *htop*) message="Mở htop rồi, nhìn load CPU có xanh mặt không người đẹp?" color=94 ;;
+        *df\ -h*) message="Check disk xong, có cần dọn rác không người đẹp?" color=92 ;;
+        *free\ -m*) message="Xem RAM còn đủ sống không người đẹp?" color=95 ;;
+        *whoami*) message="Là ai? Là chính mình chứ ai nữa người đẹp!" color=96 ;;
+        *date*) message="Giờ này còn code à? Nghỉ ngơi chút đi người đẹp!" color=91 ;;
+        *uptime*) message="Máy chạy lâu chưa? Có cần restart không người đẹp?" color=94 ;;
+        *reboot*) message="Restart máy à? Hít thở sâu rồi hãy nhấn Enter người đẹp!" color=93 ;;
+        *shutdown*) message="Tắt máy thật hả? Ghi nhớ commit xong chưa người đẹp?" color=92 ;;
         *) return ;;
     esac
     echo -e "\e[${color}m${message}\e[0m"
