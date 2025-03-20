@@ -1,12 +1,14 @@
-setopt APPEND_HISTORY
-setopt SHARE_HISTORY
 HISTFILE=$HOME/.zhistory
 SAVEHIST=1000
 HISTSIZE=999
-setopt HIST_EXPIRE_DUPS_FIRST
-setopt EXTENDED_HISTORY
+setopt APPEND_HISTORY        # Thêm vào lịch sử thay vì ghi đè
+setopt SHARE_HISTORY         # Chia sẻ lịch sử giữa các terminal
+setopt HIST_IGNORE_DUPS      # Không lưu lệnh trùng liên tiếp
+setopt HIST_SAVE_NO_DUPS     # Không lưu lệnh trùng vào file lịch sử
+setopt HIST_EXPIRE_DUPS_FIRST # Xóa lệnh trùng trước khi xóa lệnh cũ nhất
+setopt HIST_VERIFY           # Yêu cầu xác nhận trước khi thực thi lệnh từ lịch sử
 # Version for update checking
-ZSHRC_VERSION="0.0.7"
+ZSHRC_VERSION="0.0.8"
 troll_colors=(91 92 93 94 95 96) # red green yellow blue magenta cyan
 
 # Tối ưu troll theo thời gian
@@ -215,7 +217,6 @@ weather_icon() {
 
 # Function to check for and download zshrc updates
 update_zshrc() {
-    echo "Kiểm tra bản cập nhật cho .zshrc..."
     if ! check_internet; then
         echo -e "\e[91mKhông thể kết nối mạng. Vui lòng thử lại sau.\e[0m"
         return 1
@@ -245,8 +246,6 @@ update_zshrc() {
             # Restore backup
             cp ~/.zshrc.backup ~/.zshrc
         fi
-    else
-        echo -e "\e[92mBạn đang sử dụng phiên bản mới nhất ($ZSHRC_VERSION)\e[0m"
     fi
 }
 
@@ -295,7 +294,7 @@ my_clear() {
     if check_internet; then
       echo "Thời tiết hôm nay: $(weather_icon)"
     fi
-    troll_by_time
+    troll_by_time true
 }
 
 # Cấu hình cuối
