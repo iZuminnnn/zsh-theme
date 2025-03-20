@@ -6,7 +6,7 @@ HISTSIZE=999
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt EXTENDED_HISTORY
 # Version for update checking
-ZSHRC_VERSION="0.0.6"
+ZSHRC_VERSION="0.0.7"
 troll_colors=(91 92 93 94 95 96) # red green yellow blue magenta cyan
 
 # Tối ưu troll theo thời gian
@@ -20,15 +20,16 @@ troll_by_time() {
     local random_color=${troll_colors[$((RANDOM % ${#troll_colors[@]}))]}
     local message
     local messages
-
-    # Check if within 16:30-18:30
-    local force_show=false
-    if [[ ("$hour" == 16 && "$minute" -ge 30) || ("$hour" == 17) || ("$hour" == 18 && "$minute" -le 30) ]]; then
-        force_show=true
+    local chance=$((RANDOM % 100))
+    # Check if within 17:30-18:30
+    local force_show=${1:-false}
+    local force_show_by_time=false
+    if [[ ("$hour" == 17 && "$minute" -ge 30) || ("$hour" == 18 && "$minute" -le 30) ]]; then
+        force_show_by_time=true
     fi
 
     # Luôn hiển thị thông điệp khi gọi hàm (bỏ logic xác suất 10% để test dễ hơn)
-    if [[ "$force_show" == true ]]; then
+    if [[ "$force_show_by_time" == true ]] then
         messages=(
             "Muộn rồi đó má! Code ít thôi, về đi kẻo người ta chờ cơm nguội bây giờ!"
             "Giờ này còn ngồi code chi nữa? Công ty có bao cổ phần đâu mà cống hiến dữ vậy!"
@@ -62,7 +63,7 @@ troll_by_time() {
             "Deadline dí cũng không nhanh bằng tuổi xuân trôi đâu, về lẹ còn kịp!"
         )
 
-    else
+    elif (( chance < 10 )) || [[ "$force_show" == true ]]; then
         case $hour in
             00|01) messages=("Giờ này còn thức làm gì đấy? Định hẹn hò với bug xuyên đêm à?" "Ngủ sớm đi má, chứ code khuya dễ commit mấy dòng regret lắm!") ;;
             02|03) messages=("Ủa, thức khuya vậy? Có phải đang debug một lỗi mà Google cũng từ chối trả lời không?" "Giờ này vẫn còn code là trình cao thủ lắm nha!") ;;
@@ -79,10 +80,13 @@ troll_by_time() {
             *) messages=("Giờ giấc kỳ lạ quá! Không biết gọi là sáng, trưa, chiều hay tối nữa!") ;;
         esac
     fi
-
     # Chọn ngẫu nhiên một thông báo từ danh sách
-    message=${messages[$((RANDOM % ${#messages[@]}))]}
-    echo -e "\e[95m${message}\e[0m"
+    if [[ -n "$messages" ]]; then
+        message=${messages[$(((RANDOM % ${#messages[@]}) + 1))]}
+    fi
+    if [[ -n "$message" ]]; then
+        echo -e "\e[95m${message}\e[0m"
+    fi
 }
 
 
@@ -291,7 +295,7 @@ my_clear() {
     if check_internet; then
       echo "Thời tiết hôm nay: $(weather_icon)"
     fi
-    echo "$(troll_by_time)"
+    troll_by_time
 }
 
 # Cấu hình cuối
@@ -341,4 +345,4 @@ fi
 if check_internet; then
     echo "Thời tiết hôm nay: $(weather_icon)"
 fi
-echo "$(troll_by_time)"
+troll_by_time true
