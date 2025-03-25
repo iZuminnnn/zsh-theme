@@ -1,14 +1,29 @@
+# History configuration
 HISTFILE=$HOME/.zhistory
-SAVEHIST=1000
-HISTSIZE=999
-setopt APPEND_HISTORY        # Thêm vào lịch sử thay vì ghi đè
-setopt SHARE_HISTORY         # Chia sẻ lịch sử giữa các terminal
-setopt HIST_IGNORE_DUPS      # Không lưu lệnh trùng liên tiếp
-setopt HIST_SAVE_NO_DUPS     # Không lưu lệnh trùng vào file lịch sử
-setopt HIST_EXPIRE_DUPS_FIRST # Xóa lệnh trùng trước khi xóa lệnh cũ nhất
-setopt HIST_VERIFY           # Yêu cầu xác nhận trước khi thực thi lệnh từ lịch sử
+HISTSIZE=10000
+SAVEHIST=10000
+setopt APPEND_HISTORY        # Append to history instead of overwriting
+setopt SHARE_HISTORY         # Share history between sessions
+setopt HIST_IGNORE_DUPS      # Don't record if same as previous command
+setopt HIST_SAVE_NO_DUPS     # Don't write duplicate entries in history file
+setopt HIST_EXPIRE_DUPS_FIRST # Remove duplicates first when history file is full
+setopt HIST_VERIFY           # Show command with history expansion before running it
+setopt HIST_REDUCE_BLANKS    # Remove unnecessary blanks
+setopt HIST_IGNORE_SPACE     # Don't record commands starting with space
+setopt HIST_NO_STORE         # Don't store history commands
+setopt HIST_NO_FUNCTIONS     # Don't store function definitions
+setopt HIST_IGNORE_ALL_DUPS  # Remove older duplicate entries
+setopt HIST_FIND_NO_DUPS     # Don't display duplicates when searching
+setopt HIST_SAVE_BY_COPY     # Save history by copying instead of moving
+setopt HIST_FCNTL_LOCK       # Use file locking for history file
+
+# Aliases for manual updates
+alias update-zsh="source ~/.zshrc"
+alias update="update_zshrc"
+alias update-history="fc -R"  # Reload history from file
+
 # Version for update checking
-ZSHRC_VERSION="0.0.8"
+ZSHRC_VERSION="0.0.9"
 troll_colors=(91 92 93 94 95 96) # red green yellow blue magenta cyan
 
 # Function to detect WSL
@@ -204,26 +219,39 @@ weather_icon() {
     local current_time=$(date +%s)
     # Only update if it's been more than 5 minutes and we have internet
     if ((current_time - last_weather_update >= 300)) && check_internet; then
-		local weather_data=$(curl -s "wttr.in?format=%C+%t&location=hanoi&lang=en" 2>/dev/null || echo "unknown+?°C")
-		local weather=$(echo "$weather_data" | cut -d' ' -f1)
-		local temp=$(echo "$weather_data" | cut -d'+' -f2)
+        local weather_data=$(curl -s "wttr.in?format=%C+%t&location=hanoi&lang=en" 2>/dev/null || echo "unknown+?°C")
+        
+        # Debug: Print raw weather data
+        # echo "Raw weather data: $weather_data" >&2
+        
+        # Extract weather and temperature more carefully
+        local weather=$(echo "$weather_data" | sed 's/+[0-9]*°C//' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+        local temp=$(echo "$weather_data" | grep -o '+[0-9]*°C' | sed 's/+//')
+        
+        # Debug: Print processed weather and temp
+        # echo "Processed weather: $weather" >&2
+        # echo "Processed temp: $temp" >&2
+        
+        # Clean up weather string
+        weather=$(echo "$weather" | tr '[:upper:]' '[:lower:]')
+        
         cached_weather_icon=$(
             case "$weather" in
-				"Sunny") echo "\e[93m☀️ Nắng đẹp, ra ngoài hít drama đi! ${temp}\e[0m" ;;
-				"Clear") echo "\e[33m🌞 Trời trong, tâm hồn cũng nên thế! ${temp}\e[0m" ;;
-				"Partly cloudy") echo "\e[37m⛅ Trời nửa nắng nửa mơ màng! ${temp}\e[0m" ;;
-				"Cloudy") echo "\e[90m☁️ Trời âm u như deadline gần kề! ${temp}\e[0m" ;;
-				"Overcast") echo "\e[90m🌥️ U ám quá, pha trà ngồi chill đi! ${temp}\e[0m" ;;
-				"Mist"|"Fog") echo "\e[37m🌫️ Sương mù, cẩn thận lạc lối! ${temp}\e[0m" ;;
-				"Light rain"|"Drizzle") echo "\e[94m🌦️ Mưa lất phất, lãng mạn ghê! ${temp}\e[0m" ;;
-				"Rain"|"Shower"|"Moderate rain") echo "\e[94m🌧️ Mưa rồi, ở nhà code thôi! ${temp}\e[0m" ;;
-				"Heavy rain"|"Heavy shower") echo "\e[34m⛈️ Mưa to, trùm chăn ngủ tiếp! ${temp}\e[0m" ;;
-				"Thunderstorm"|"Thundery") echo "\e[34m🌩️ Sấm chớp, đừng ra ngoài nhé! ${temp}\e[0m" ;;
-				"Snow") echo "\e[97m❄️ Tuyết rơi, mơ về Đà Lạt à? ${temp}\e[0m" ;;
-				"Light snow"|"Snow shower") echo "\e[97m🌨️ Tuyết nhẹ, lạnh mà vui! ${temp}\e[0m" ;;
-				"Hail") echo "\e[96m🌧️❄️ Mưa đá, trốn trong nhà thôi! ${temp}\e[0m" ;;
-				"Sleet") echo "\e[96m🌧️🌨️ Mưa tuyết, thời tiết kỳ lạ thật! ${temp}\e[0m" ;;
-				*) echo "\e[32m🌍 Trời gì mà lạ thế không biết! ${temp}\e[0m" ;;
+                *"sunny"*) echo "\e[93m☀️ Nắng đẹp, ra ngoài hít drama đi! ${temp}\e[0m" ;;
+                *"clear"*) echo "\e[33m🌞 Trời trong, tâm hồn cũng nên thế! ${temp}\e[0m" ;;
+                *"partly cloudy"*) echo "\e[37m⛅ Trời nửa nắng nửa mơ màng! ${temp}\e[0m" ;;
+                *"cloudy"*) echo "\e[90m☁️ Trời âm u như deadline gần kề! ${temp}\e[0m" ;;
+                *"overcast"*) echo "\e[90m🌥️ U ám quá, pha trà ngồi chill đi! ${temp}\e[0m" ;;
+                *"mist"*|*"fog"*) echo "\e[37m🌫️ Sương mù, cẩn thận lạc lối! ${temp}\e[0m" ;;
+                *"light rain"*|*"drizzle"*) echo "\e[94m🌦️ Mưa lất phất, lãng mạn ghê! ${temp}\e[0m" ;;
+                *"rain"*|*"shower"*|*"moderate rain"*) echo "\e[94m🌧️ Mưa rồi, ở nhà code thôi! ${temp}\e[0m" ;;
+                *"heavy rain"*|*"heavy shower"*) echo "\e[34m⛈️ Mưa to, trùm chăn ngủ tiếp! ${temp}\e[0m" ;;
+                *"thunderstorm"*|*"thundery"*) echo "\e[34m🌩️ Sấm chớp, đừng ra ngoài nhé! ${temp}\e[0m" ;;
+                *"snow"*) echo "\e[97m❄️ Tuyết rơi, mơ về Đà Lạt à? ${temp}\e[0m" ;;
+                *"light snow"*|*"snow shower"*) echo "\e[97m🌨️ Tuyết nhẹ, lạnh mà vui! ${temp}\e[0m" ;;
+                *"hail"*) echo "\e[96m🌧️❄️ Mưa đá, trốn trong nhà thôi! ${temp}\e[0m" ;;
+                *"sleet"*) echo "\e[96m🌧️🌨️ Mưa tuyết, thời tiết kỳ lạ thật! ${temp}\e[0m" ;;
+                *) echo "\e[32m🌍 Trời gì mà lạ thế không biết! ${temp}\e[0m" ;;
             esac
         )
         last_weather_update=$current_time
