@@ -11,6 +11,26 @@ setopt HIST_VERIFY           # Yêu cầu xác nhận trước khi thực thi l�
 ZSHRC_VERSION="0.0.8"
 troll_colors=(91 92 93 94 95 96) # red green yellow blue magenta cyan
 
+# Function to detect WSL
+detect_wsl() {
+    if [[ -n "$MSYSTEM" ]]; then
+        echo -e "\e[91m🖥️  Windows (Git Bash)\e[0m"
+    elif [[ -f /proc/version ]]; then
+        if grep -qi microsoft /proc/version; then
+            echo -e "\e[93m🐧 WSL\e[0m"
+        else
+            echo -e "\e[92m🐧 Linux\e[0m"
+        fi
+    else
+        case "$OSTYPE" in
+            darwin*) echo -e "\e[94m🍎 macOS\e[0m" ;;
+            msys*|cygwin*) echo -e "\e[91m🪟 Windows\e[0m" ;;
+            *) echo -e "\e[90m❓ Unknown\e[0m" ;;
+        esac
+    fi
+}
+
+
 # Tối ưu troll theo thời gian
 troll_by_time() {
     local hour=$(date +%H)
@@ -31,7 +51,7 @@ troll_by_time() {
     fi
 
     # Luôn hiển thị thông điệp khi gọi hàm (bỏ logic xác suất 10% để test dễ hơn)
-    if [[ "$force_show_by_time" == true ]] then
+    if [[ "$force_show_by_time" == true ]]; then
         messages=(
             "Muộn rồi đó má! Code ít thôi, về đi kẻo người ta chờ cơm nguội bây giờ!"
             "Giờ này còn ngồi code chi nữa? Công ty có bao cổ phần đâu mà cống hiến dữ vậy!"
@@ -263,11 +283,9 @@ preexec() {
     current_time=$(date +%s)
     if (( current_time - last_troll_time >= troll_interval )); then
         troll_time_message=$(troll_by_time)
-        echo "$troll_time_message"
+        [[ -n "$troll_time_message" ]] && echo "$troll_time_message"
         last_troll_time=$current_time
     fi
-    # troll_time_message=$(troll_by_time)
-    # echo "$troll_time_message"  # Luôn hiển thị, không cần kiểm tra rỗng
 
     # Gọi troll_cmd
     troll_message=$(troll_cmd "$last_cmd")
@@ -341,6 +359,7 @@ fi
 } 
 
 # Only show weather if we have internet
+detect_wsl
 if check_internet; then
     echo "Thời tiết hôm nay: $(weather_icon)"
 fi
