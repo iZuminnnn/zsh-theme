@@ -337,6 +337,7 @@ precmd() {
 # Clear custom
 my_clear() {
     command clear
+    detect_wsl
     if check_internet; then
       echo "Thời tiết hôm nay: $(weather_icon)"
     fi
