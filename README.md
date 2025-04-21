@@ -98,7 +98,17 @@
      3. Commit your changes (git commit -m "Add new troll quote").
      4. Push to the branch (git push origin feature/amazing-troll).
      5. Open a Pull Request.
-
+10. ** Set zsh auto run when open terminal:
+    - Open bashrc file
+       ```bash
+      nano ~/.bashrc
+      ```
+    - Add it
+      ```bash
+      if [ -t 1 ]; then
+        exec zsh
+      fi
+      ```
 ---
 
 ## 📜 License
