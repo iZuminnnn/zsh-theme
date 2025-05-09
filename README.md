@@ -35,7 +35,7 @@
 ---
 
 ## 🚀 Installation
-
+**Note: you need download zsh first:** https://packages.msys2.org/packages/zsh
 1. **Clone or Copy the Configuration**  
    Add the script to your `~/.zshrc`:
 
