@@ -463,7 +463,7 @@ preexec() {
 }
 
 precmd() {
-    PS1="%F{green}╭─$(time_icon) %F{cyan}%n@%m %F{magenta}%~%f $(venv_info) $(git_info) %F{red}~ %D{%H:%M:%S}%f
+    PS1="%F{green}╭─%f%F{red}%D{%H:%M:%S}%f%F{green}─%f$(time_icon) %F{cyan}%n@%m %F{magenta}%~%f $(venv_info) $(git_info)
 %F{green}╰─➜  %f"
     
     if [[ -n $timer ]]; then
