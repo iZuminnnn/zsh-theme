@@ -1,0 +1,82 @@
+# Vietnamese Language Pack for Zsh Troll Themer
+# Format: category:message
+
+# Welcome message
+welcome:🎉 Chúc người đẹp một ngày mới tràn đầy năng lượng nhé! Happy coding😘
+
+# Overtime messages
+overtime:Muộn rồi đó má! Code ít thôi, về đi kẻo người ta chờ cơm nguội bây giờ!
+overtime:Giờ này còn ngồi code chi nữa? Công ty có bao cổ phần đâu mà cống hiến dữ vậy!
+overtime:Về đi chứ! Bug thì fix hoài không hết, nhưng thanh xuân mà hết rồi là khỏi fix!
+
+# Hourly messages
+hour_00:Giờ này còn thức làm gì đấy? Định hẹn hò với bug xuyên đêm à?
+hour_01:Đêm khuya rồi, nghỉ ngơi đi! Code mãi cũng không ra được bug-free đâu!
+hour_02:2 giờ sáng rồi mà còn code? Chắc là đang debug cái gì khó quá nhỉ?
+hour_03:3 giờ sáng! Chưa ngủ à? Tí nữa có ma code xuất hiện đấy!
+hour_04:4 giờ sáng rồi! Ngủ đi, mai còn phải fix bug tiếp!
+hour_05:5 giờ sáng! Sắp sáng rồi, ngủ tý đi rồi dậy làm tiếp!
+hour_06:Sáng sớm thế này mà đã code à? Chăm chỉ quá!
+hour_07:7 giờ sáng! Bắt đầu ngày mới với tinh thần tươi tắn nào!
+hour_08:Cà phê sáng chưa? Hay vẫn đang nạp caffeine bằng stackoverflow?
+hour_09:9 giờ sáng! Standup meeting rồi, có gì mới để share không?
+hour_10:10 giờ sáng! Đang sprint hay đang stuck với bug nào đó?
+hour_11:11 giờ sáng! Sắp tới giờ ăn trưa rồi, code xong task này đi!
+hour_12:Ăn trưa chưa? Hay lại định sống bằng niềm tin vào deadline?
+hour_13:Ăn trưa xong rồi, năng lượng đầy đủ để chiến tiếp!
+hour_14:2 giờ chiều! Buồn ngủ chưa? Uống thêm cà phê đi!
+hour_15:3 giờ chiều! Review code hay viết test case gì đó đi!
+hour_16:4 giờ chiều! Sắp về rồi, wrap-up công việc thôi!
+hour_17:5 giờ chiều! Giờ tan ca đây, commit code và về thôi!
+hour_18:Giờ này dev đang code hay đang nhậu?
+hour_19:7 giờ tối! Đang overtime hay đang làm side project?
+hour_20:8 giờ tối! Vẫn còn code à? Work-life balance đâu rồi?
+hour_21:9 giờ tối! Nghỉ ngơi đi, ngày mai còn dài!
+hour_22:Giờ này vẫn còn cày à? Tí nữa ngủ luôn trên bàn phím cho coi!
+hour_23:11 giờ đêm! Sắp sang ngày mới rồi, ngủ đi!
+hour_other:Giờ giấc kỳ lạ quá! Không biết gọi là sáng, trưa, chiều hay tối nữa!
+
+# Command messages
+cmd_git_commit:Commit xong rồi thì nhớ push người đẹp!
+cmd_git_push:Push thành công rồi, nghỉ xíu uống miếng nước người đẹp!
+cmd_git_status:Check status để xem có gì cần commit không nhé!
+cmd_git_pull:Pull về xem có gì mới từ team không!
+cmd_git_merge:Merge cẩn thận nhé, đừng để conflict!
+cmd_git_rebase:Rebase này, history sẽ đẹp hơn đấy!
+cmd_git_log:Xem lại lịch sử commit để nhớ đã làm gì!
+cmd_git_diff:So sánh code để xem thay đổi gì nhé!
+cmd_git_reset:Reset cẩn thận! Đừng mất code!
+cmd_git_cherry_pick:Cherry-pick commit này sang branch khác!
+cmd_python:Python thần thánh, chạy thử coi output đẹp chưa người đẹp!
+cmd_pip:Cài thêm package mới à? Nhớ freeze requirements nhé!
+cmd_npm_install:Install dependencies xong rồi, giờ code thôi!
+cmd_npm_start:Start development server! Ngồi chờ hot reload nhé!
+cmd_npm_build:Build production, check lỗi kỹ trước khi deploy!
+cmd_yarn:Yarn thay cho npm à? Cũng được, miễn là chạy ngon!
+cmd_rm:Xóa file à? Cẩn thận đấy, xóa nhầm là khóc!
+cmd_mv:Di chuyển/đổi tên file! Nhớ update import nhé!
+cmd_cp:Copy file! Backup code là thói quen tốt!
+cmd_cd:Chuyển thư mục! Đi đâu vậy người đẹp?
+cmd_ls:Danh sách file đây, cần gì cứ gọi anh người đẹp!
+cmd_cat:Xem nội dung file nhanh! Có gì hay không?
+cmd_vim:Vim master! Nhớ :wq để thoát nhé!
+cmd_nano:Nano editor đơn giản, dễ dùng cho người mới!
+cmd_docker_build:Build Docker image! Containerize all the things!
+cmd_docker_run:Chạy container! Hy vọng không có lỗi gì!
+cmd_docker_ps:Xem container nào đang chạy!
+cmd_docker_stop:Stop container! Cleanup resources thôi!
+cmd_sudo:Sudo power! With great power comes great responsibility!
+cmd_chmod:Thay đổi permission file! 755 hay 644 nhỉ?
+cmd_chown:Đổi owner file! Ai là chủ nhân thực sự?
+cmd_scp:Copy file qua SSH! Network transfer thần thánh!
+cmd_rsync:Sync files efficiently! Rsync là vua backup!
+cmd_kill:Kill process! Goodbye zombie processes!
+cmd_ps:Xem process đang chạy! CPU đang làm gì vậy?
+cmd_htop:Htop monitor system! Đẹp hơn top nhiều!
+cmd_df:Check disk space! Còn bao nhiêu GB trống?
+cmd_free:Check memory usage! RAM có đủ không?
+cmd_whoami:Tôi là ai? Bạn đang login bằng user gì?
+cmd_date:Thời gian hiện tại! Time is money!
+cmd_uptime:System uptime! Máy chạy được bao lâu rồi?
+cmd_reboot:Reboot system! Turn it off and on again!
+cmd_shutdown:Shutdown! Tắt máy nghỉ ngơi thôi!

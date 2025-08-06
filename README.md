@@ -1,124 +1,291 @@
-# Zsh Custome Theme
+# Zsh Troll Themer
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)  
-[![Zsh Version](https://img.shields.io/badge/Zsh-5.0%2B-brightgreen)](https://www.zsh.org/)  
-**A dynamic, humorous, and feature-rich Zsh configuration that combines productivity with playful developer trolling.**
+A dynamic, humorous Vietnamese developer-focused Zsh theme with multi-language support.
 
----
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Zsh Version](https://img.shields.io/badge/Zsh-5.0%2B-brightgreen)](https://www.zsh.org/)
+[![Version](https://img.shields.io/badge/Version-1.0.0-orange)](https://github.com/iZuminnnn/troll-theme)
 
-## 📖 Overview
+## ✨ Features
 
-**Zsh Troll Prompt** is a custom Zsh configuration designed to enhance your terminal experience with a mix of utility and entertainment. It delivers real-time system insights (e.g., weather, Git status, CPU usage) while playfully "trolling" you with witty Vietnamese developer-centric quotes. Perfect for coders who want a bit of fun alongside their workflow!
+- 🌍 **Multi-language support** (Vietnamese, English) with easy extension system
+- 🕐 **Time-based troll messages** with special overtime reminders (17:30-18:30)
+- ⚡ **Command-specific responses** for Git, Docker, npm, Python, and 50+ commands
+- 🎨 **Dynamic prompt** with time icons, git status, virtual environment info
+- 📱 **System detection** (WSL, macOS, Windows, Linux)
+- ⚙️ **Configurable** language settings via config file or environment variables
+- 🔄 **Auto-setup** - automatically creates required directories and default files
+- 💬 **70+ contextual messages** for different times and commands
 
----
+## 🚀 Quick Start
 
-## ✨ Key Features
-
-- **Humorous Troll Quotes**: Randomized, colorful developer quips like _"Đã debug gì chưa hay đổ lỗi cho intern người đẹp?"_.
-- **Real-Time Weather**: Fetches weather updates for Hanoi (customizable) with emoji-enhanced output.
-- **Smart Prompt**: Displays username, hostname, Git branch, virtual environment, and command execution time.
-- **CPU Monitoring**: Alerts with funny messages when CPU usage exceeds 70%.
-- **Time-Based Trolling**: Context-aware messages based on the time of day.
-- **Cross-Platform Support**: Compatible with macOS, Linux, and Windows (via WSL/MSYS/Cygwin).
-
----
-
-## 🛠️ Requirements
-
-| Component    | Requirement           | Notes                           |
-| ------------ | --------------------- | ------------------------------- |
-| Shell        | Zsh 5.0+              | Install via package manager     |
-| Network      | Internet connection   | For weather updates via wttr.in |
-| Optional     | zsh-autosuggestions   | For command suggestion          |
-| Supported OS | macOS, Linux, Windows | Windows requires WSL/Cygwin     |
-
----
-
-## 🚀 Installation
-**Note: you need download zsh first:** https://packages.msys2.org/packages/zsh
-1. **Clone or Copy the Configuration**  
-   Add the script to your `~/.zshrc`:
-
+1. **Clone the repository:**
    ```bash
-   curl -o ~/.zshrc https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.zshrc
+   git clone https://github.com/iZuminnnn/troll-theme.git
+   cd troll-theme
    ```
 
-2. **Install Zsh Autosuggestions (Optional)**
-   Enable command suggestions:
-
+2. **Source the theme:**
    ```bash
-   git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+   source .zshrc
    ```
 
-3. **Apply the Configuration**
-   Reload your shell:
+3. **Enjoy the trolling!** 🎉
 
+The theme will automatically create the necessary configuration files and language packs on first run.
+
+## 🌍 Language Configuration
+
+### Method 1: Environment Variable (Recommended)
+```bash
+export TROLL_LANG="en"  # English
+export TROLL_LANG="vi"  # Vietnamese (default)
+```
+
+### Method 2: Configuration File
+
+The theme automatically creates `.troll_themer/config`:
+
+```bash
+# Available languages: vi (Vietnamese), en (English)
+TROLL_LANG="vi"
+```
+
+## 🔇 Serious Mode
+
+Sometimes you need to focus without the trolling. The theme includes a **serious mode** that temporarily disables all troll messages:
+
+### Quick Mode Switching
+
+```bash
+# Enable serious mode (disable trolling)
+serious
+# or
+export TROLL_MODE="serious"
+
+# Back to troll mode (enable trolling)
+troll
+# or
+unset TROLL_MODE
+
+# Check current mode
+mode-status
+```
+
+### Use Cases
+
+- **Important presentations** - No unexpected messages during demos
+- **Pair programming** - Professional environment with colleagues
+- **Learning/tutorials** - Clean output when following tutorials
+- **Production debugging** - Focus on serious troubleshooting
+
+**Example:**
+
+```bash
+$ serious
+🔇 Serious mode activated. Trolling disabled.
+
+$ git commit -m "Fix critical bug"
+# No troll messages, clean output
+
+$ troll  
+🎭 Troll mode activated. Let the fun begin!
+
+$ git push
+Push thành công rồi, nghỉ xíu uống miếng nước người đẹp!
+```
+
+## 📁 Project Structure
+
+```
+zsh-theme/
+├── .zshrc                   # Main theme file
+├── .troll_themer/          # Auto-created configuration directory
+│   ├── config              # Language configuration file
+│   ├── update              # Update check timestamp
+│   └── lang/               # Language packs directory
+│       ├── vi.txt          # Vietnamese messages (87 messages)
+│       └── en.txt          # English messages (87 messages)
+├── version.txt             # Theme version
+├── LICENSE                 # MIT License file
+└── README.md               # This documentation
+```
+
+## � Message Categories
+
+| Category | Count | Description |
+|----------|-------|-------------|
+| `welcome` | 1 | Welcome message on theme load |
+| `update_*` | 2 | Update and repository messages |
+| `overtime` | 3 | Work-life balance reminders (17:30-18:30) |
+| `hour_*` | 24 | Time-specific messages for each hour |
+| `cmd_*` | 57 | Command-specific responses |
+
+### Supported Commands
+Git, Docker, npm, yarn, Python, pip, system commands (ls, cd, mv, cp, rm), text editors (vim, nano), system monitoring (htop, ps, df, free), and many more!
+
+## �️ Adding New Languages
+
+1. **Create a language file:**
    ```bash
-   source ~/.zshrc
+   touch .troll_themer/lang/your_lang.txt
    ```
 
-4. **Customize (Optional)**
+2. **Follow the format:**
+   ```
+   # Your Language Pack for Zsh Troll Themer
+   # Format: category:message
 
-   - Edit `weather_icon` to change the location (e.g., replace hanoi with your city).
-   - Modify `troll_quotes` to add your own humorous lines.
-
-5. **📸 Preview**
-
-   ```bash
-   Đã commit gì chưa hay để git blame người đẹp?
-   Thời tiết hôm nay: ☀️ Sunny, perfect for some outdoor debugging! 25°C
-   🌞 user@machine ~/code (🐍 myenv) (🌿 main)
-    ➜
+   welcome:🎉 Welcome message in your language
+   overtime:Work late message
+   hour_08:Morning message
+   cmd_git_commit:Git commit response
    ```
 
-6. **How It Works**
+3. **Set your language:**
+   ```bash
+   export TROLL_LANG="your_lang"
+   ```
 
-   - Troll Quotes: Triggered on shell startup or `clear`, with ANSI-colored randomness.
-   - Weather Updates: Cached every 5 minutes from `wttr.in`, paired with emojis and witty remarks.
-   - Prompt Details: Includes time-of-day icons, Git status with dirty/clean indicators, and virtual env info.
-   - CPU Alerts: Monitors usage across platforms, trolling you when it spikes.
-   - Command Feedback: Context-sensitive trolling for common commands like `git commit` or `npm`.
+## 🎨 Theme Preview
 
-7. **🧩 Customization**
+```bash
+🎉 Welcome to Zsh Troll Themer! Chúc người đẹp một ngày mới tràn đầy năng lượng nhé! Happy coding😘
+Repository mới: https://github.com/iZuminnnn/troll-theme
+🖥️  Windows (Git Bash)
+Cà phê sáng chưa? Hay vẫn đang nạp caffeine bằng stackoverflow?
 
-   - Location: Update `curl -s "wttr.in?format=%C+%t&location=hanoi"` in `weather_icon`.
-   - Quotes: Extend the `troll_quotes` array with your own lines.
-   - Colors: Adjust `troll_colors` for different ANSI color codes.
+╭─🌞 user@machine ~/projects/zsh-theme 🌿(main)
+╰─➜ git commit -m "Add new feature"
+Commit xong rồi thì nhớ push người đẹp!                                   120ms
 
-8. **🐛 Troubleshooting**
+╭─🌞 user@machine ~/projects/zsh-theme 🌿(main)
+╰─➜ 
+```
 
-   - Weather not loading? Ensure an active internet connection and check `curl` availability.
-   - CPU monitoring issues? Some Windows setups may require additional tools (e.g., `wmic` or `PowerShell`).
-   - Missing suggestions? Verify `zsh-autosuggestions` is installed and sourced.
+## ⚙️ Configuration Options
 
-9. **🤝 Contributing**
-   - We welcome contributions! To get started:
-     1. Fork this repository.
-     2. Create a feature branch (git checkout -b feature/amazing-troll).
-     3. Commit your changes (git commit -m "Add new troll quote").
-     4. Push to the branch (git push origin feature/amazing-troll).
-     5. Open a Pull Request.
-10. ** Set zsh auto run when open terminal:
-    - Open bashrc file
-       ```bash
-      nano ~/.bashrc
-      ```
-    - Add it
-      ```bash
-      if [ -t 1 ]; then
-        exec zsh
-      fi
-      ```
----
+### Environment Variables
+
+- `TROLL_LANG` - Set preferred language (vi, en, or custom)
+- `TROLL_MODE` - Set to "serious" to disable trolling temporarily
+- `THEME_NAME` - Customize theme name in welcome message
+
+### Files
+
+- `.troll_themer/config` - Main configuration file
+- `.troll_themer/update` - Update check timestamp
+- `.troll_themer/lang/*.txt` - Language message files
+
+## 🔧 Requirements
+
+- **Zsh 5.0+** - The theme is built for Zsh shell
+- **UTF-8 terminal** - For proper emoji and Vietnamese character display
+- **Git** (optional) - For git status display in prompt
+
+### 🎨 Recommended Font
+
+**We highly recommend using [Nerd Fonts](https://www.nerdfonts.com/) for the best experience:**
+
+- **Free and open source** - Completely free to use
+- **Rich character support** - Includes powerline symbols, icons, and Vietnamese characters
+- **Beautiful display** - Makes your terminal look professional and modern
+- **Wide compatibility** - Works with all major terminals and operating systems
+
+#### 📁 Included Font (Ready to Use!)
+
+**This theme includes a pre-configured font in the project:**
+
+- **Cascadia Code Nerd Font Mono (SemiBold)** - Located in `.troll_themer/font/`
+- **Perfect for this theme** - Optimized for Vietnamese characters and symbols
+- **No additional download needed** - Just install the font file directly
+
+**Installation from project folder:**
+
+```bash
+# Windows: Double-click the font file to install
+# Or copy to: C:\Windows\Fonts\
+
+# Linux/Ubuntu:
+sudo cp .troll_themer/font/CaskaydiaMonoNerdFontMono-SemiBold.ttf /usr/share/fonts/
+sudo fc-cache -fv
+
+# macOS:
+cp .troll_themer/font/CaskaydiaMonoNerdFontMono-SemiBold.ttf ~/Library/Fonts/
+```
+
+#### 🌐 Alternative Popular Choices
+
+- [JetBrains Mono Nerd Font](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/JetBrainsMono) - Clean, modern coding font
+- [Fira Code Nerd Font](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/FiraCode) - Popular with programming ligatures
+- [Hack Nerd Font](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack) - Designed specifically for source code
+
+**Download alternatives:**
+
+```bash
+# Download and install any Nerd Font from:
+# https://www.nerdfonts.com/font-downloads
+
+# For Ubuntu/Debian:
+sudo apt install fonts-powerline
+
+# For macOS:
+brew tap homebrew/cask-fonts
+brew install font-jetbrains-mono-nerd-font
+```
+
+### Optional Enhancements
+
+- [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) - Command suggestions
+- A powerline-compatible font for better prompt display
+
+## 🐛 Troubleshooting
+
+**Theme not loading?**
+
+- Ensure you're using Zsh: `echo $SHELL`
+- Check file permissions: `ls -la .zshrc`
+
+**Messages not displaying?**
+
+- Verify language files exist: `ls .troll_themer/lang/`
+- Check language setting: `echo $TROLL_LANG`
+
+**Encoding issues?**
+
+- Ensure terminal supports UTF-8
+- Try: `export LANG=en_US.UTF-8`
+
+## 🤝 Contributing
+
+Contributions are welcome! Here's how you can help:
+
+1. **Add new languages** - Create language packs for your locale
+2. **Improve messages** - Make the trolling funnier or more relevant
+3. **Add new commands** - Extend command-specific responses
+4. **Bug fixes** - Report and fix issues
+
+### Development Setup
+
+```bash
+git clone https://github.com/iZuminnnn/troll-theme.git
+cd troll-theme
+# Test your changes
+source .zshrc
+```
 
 ## 📜 License
 
-- This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙌 Acknowledgments
+## � Acknowledgments
 
-- Inspired by the Vietnamese developer community's love for humor and code.
-- Powered by wttr.in for weather data.
-- Built with ❤️ by iZuminnnn.
+- Inspired by the Vietnamese developer community's love for humor and code
+- Built with ❤️ for developers who enjoy a bit of trolling with their terminal
+- Special thanks to all contributors and users
 
-_Code smarter, laugh harder!_
+---
+
+**Made with 💻 and ☕ by [iZuminnnn](https://github.com/iZuminnnn)**
+
+*"Code smarter, laugh harder!"* 😄

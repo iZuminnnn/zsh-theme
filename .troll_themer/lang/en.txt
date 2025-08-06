@@ -1,0 +1,113 @@
+# English Language Pack for Zsh Troll Themer
+# Format: category:message
+
+# Welcome message
+welcome:🎉 Have an amazing day full of energy! Happy coding😘
+
+# Update messages
+update_disabled:Update feature will be activated after repository rename.
+update_repo:New repository: https://github.com/iZuminnnn/troll-theme
+
+# Time-based messages (17:30-18:30 - end of work day)
+overtime:It's getting late! Code less, go home before dinner gets cold!
+overtime:Still coding at this hour? The company doesn't have that many shares for you to work this hard!
+overtime:Go home! Bugs will never end, but youth will - and you can't fix that!
+overtime:Start shutting down, don't let today become another meaningless OT day!
+overtime:Deadlines are important, but people waiting for dinner are more important!
+overtime:Shut down now! Go home, kiss your loved one, hug your kids, eat dinner! Don't come home to just... the cat!
+overtime:Sit a bit longer and the company will print your name on the keyboard, go home!
+overtime:Still sitting there? Go quickly, don't let tomorrow the company give you a pillow and blanket for convenience!
+overtime:Typing endlessly, aren't you bored? Go home, keyboards can be replaced, but youth can't be fixed once worn out!
+overtime:Go home! Don't let today become a meaningless OT day with the same salary!
+overtime:Code a bit more and tomorrow HR will send you a contract to rent the company as your home!
+overtime:Computers don't need rest, but you do! Shut down now!
+overtime:Bugs never end, but life's deadline comes fast, go home!
+overtime:Sit a bit longer and the company will engrave your name on the chair, go home!
+overtime:Go home! The company doesn't have shares for you to sacrifice this much!
+overtime:Type less, save energy to hold your loved one's hand!
+overtime:Go quickly! Don't come home to just... the cat looking at you with pitiful eyes!
+overtime:Type more and the keyboard will sue you to the union!
+overtime:Go home! Don't let colleagues think you're the night security guard tomorrow!
+overtime:OT won't make you rich, but it will definitely make you old!
+overtime:Computers can be upgraded, but if your spine breaks, you're done!
+overtime:Can't finish coding? Continue tomorrow, losing sleep means no coding tomorrow!
+overtime:The boss doesn't see your OT, but the neurologist will soon!
+overtime:Go home! Or planning to debug your whole life?
+overtime:Bugs can wait, but your lover can't!
+overtime:Go quickly! Don't go to work tomorrow with eyes darker than dark mode!
+overtime:The company doesn't close, but your favorite restaurant is about to close!
+overtime:Bug fixed yet? Not yet? Fix tomorrow, go home late again and only bugs will be your friends!
+overtime:Sit a bit more and tomorrow HR will give you a 'persistent employee' medal!
+overtime:Pressured deadlines aren't faster than youth passing by, go home while you can!
+
+# Hourly messages
+hour_00:Still awake at this hour? Planning a date with bugs all night?
+hour_00:Sleep early, coding late leads to committing regretful lines!
+hour_02:Wow, staying up late? Debugging an error that even Google refuses to answer?
+hour_02:Still coding at this hour shows you're quite skilled!
+hour_04:Dawn is coming, sleeping yet or practicing 'persistent bug' kung fu?
+hour_04:Roosters are crowing but bugs still won't go to sleep?
+hour_06:Awake yet? Or still wrapped in blankets while bugs are waiting!
+hour_06:Morning already, open VS Code or open your rice bowl first?
+hour_08:Had morning coffee? Or still loading caffeine from StackOverflow?
+hour_08:What's for breakfast today? Don't say 'fix bug' again!
+hour_10:Probably still in meetings right? Remember 'talk less, code more'!
+hour_10:Work going well? Or mood more chaotic than git merge?
+hour_12:Had lunch yet? Or planning to live on faith in deadlines again?
+hour_12:Do bugs take lunch breaks? No! So developers don't either!
+hour_14:Easy to zone out at this time, but code zones out faster than devs!
+hour_14:Afternoon tea yet? Or still busy fixing bugs without a sip?
+hour_16:Afternoon already, energy still there or mood dropping with bugs?
+hour_16:Afternoon coding tends to have bugs, be careful or won't fix in time tomorrow!
+hour_18:Are devs coding or drinking at this hour?
+hour_18:Be careful, evening code easily commits regretful lines!
+hour_20:Planning to play games to reduce stress or hugging bugs all evening?
+hour_20:Done coding? Rest a bit! Don't let bugs steal your youth!
+hour_22:Still grinding at this hour? Soon you'll sleep on the keyboard!
+hour_22:Being a dev like this, wake up tomorrow as a zombie!
+hour_other:What strange hours! Don't know if it's morning, noon, evening or night!
+
+# Command messages
+cmd_git_commit:Commit done, remember to push, beautiful!
+cmd_git_push:Push successful, take a break and drink some water, beautiful!
+cmd_git_status:Always checking status, see any results yet, beautiful?
+cmd_git_pull:Pulled code, remember to test thoroughly, beautiful!
+cmd_git_merge:Merge done, remember to read the log, beautiful!
+cmd_git_rebase:Rebase done, look at commit history, is it beautiful?
+cmd_git_log:Reading logs, see who caused the errors, beautiful?
+cmd_git_diff:Check the diff, anything surprising, beautiful?
+cmd_git_reset:Reset gently, don't lose your hard work, beautiful!
+cmd_git_cherry_pick:Pick commits carefully, don't pick drama by mistake, beautiful!
+cmd_python:Python is divine, try running and see if output is beautiful!
+cmd_pip:Pip install done, dependencies complete, beautiful?
+cmd_npm_install:npm install done, remember to test if it runs smoothly, beautiful!
+cmd_npm_start:Server started, check the UI yet, beautiful?
+cmd_npm_build:Build complete, deployed to production yet, beautiful?
+cmd_yarn:Using yarn? Developer has good taste, beautiful!
+cmd_rm:Delete complete, remember to check, don't lose anything important, beautiful!
+cmd_mv:Move files carefully, don't lose track, beautiful!
+cmd_cp:Copy done, remember to check again, don't miss anything, beautiful!
+cmd_cd:In the right directory? Work efficiently, beautiful!
+cmd_ls:Here's the file list, need anything just call me, beautiful!
+cmd_cat:File opened, understand everything yet, beautiful?
+cmd_vim:Entered Vim, remember how to exit, beautiful? 😆
+cmd_nano:Using nano? Simple and easy to use, beautiful!
+cmd_docker_build:Docker build done, now try running it, beautiful!
+cmd_docker_run:Container running, open terminal and check, beautiful!
+cmd_docker_ps:Look at containers, running smoothly, beautiful?
+cmd_docker_stop:Container stopped, planning to start again, beautiful?
+cmd_sudo:Sudo is divine, be careful with ultimate power, beautiful!
+cmd_chmod:Permissions set, test again, beautiful!
+cmd_chown:Ownership transferred, correct owner, beautiful?
+cmd_scp:Transferring files via SSH, hope it's fast, beautiful!
+cmd_rsync:Files synced, don't miss anything, beautiful!
+cmd_kill:Process killed, sure it won't restart, beautiful?
+cmd_ps:Process list here, found the CPU hog yet, beautiful?
+cmd_htop:Opened htop, CPU load making you pale, beautiful?
+cmd_df:Disk checked, need to clean up, beautiful?
+cmd_free:See if RAM is enough to survive, beautiful?
+cmd_whoami:Who am I? It's yourself, who else, beautiful!
+cmd_date:Still coding at this hour? Rest a bit, beautiful!
+cmd_uptime:Machine running long? Need restart, beautiful?
+cmd_reboot:Restarting machine? Take a deep breath then press Enter, beautiful!
+cmd_shutdown:Really shutting down? Remember if you committed, beautiful?

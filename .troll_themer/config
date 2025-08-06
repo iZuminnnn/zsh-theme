@@ -1,0 +1,8 @@
+# Configuration file for Zsh Troll Themer
+# Set your preferred language here
+
+# Available languages: vi (Vietnamese), en (English)
+# Default language if not set or file not found: vi
+TROLL_LANG="vi"
+# You can also set this via environment variable:
+# export TROLL_LANG="en"

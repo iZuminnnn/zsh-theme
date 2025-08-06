@@ -1,11 +1,17 @@
+# Zsh Troll Themer - Version 1.0.0
+# A dynamic, humorous Vietnamese developer-focused Zsh theme
+# Repository: https://github.com/iZuminnnn/troll-theme
+
+if [[ "$PAGER" == "head -n 10000 | cat" || "$COMPOSER_NO_INTERACTION" == "1" ]]; then
+  return
+fi
+
 # History configuration
 HISTFILE=$HOME/.zhistory
 HISTSIZE=10000
 SAVEHIST=10000
 setopt APPEND_HISTORY        # Append to history instead of overwriting
 setopt SHARE_HISTORY         # Share history between sessions
-setopt HIST_IGNORE_DUPS      # Don't record if same as previous command
-setopt HIST_SAVE_NO_DUPS     # Don't write duplicate entries in history file
 setopt HIST_EXPIRE_DUPS_FIRST # Remove duplicates first when history file is full
 setopt HIST_VERIFY           # Show command with history expansion before running it
 setopt HIST_REDUCE_BLANKS    # Remove unnecessary blanks
@@ -23,8 +29,132 @@ alias update="update_zshrc"
 alias update-history="fc -R"  # Reload history from file
 
 # Version for update checking
-ZSHRC_VERSION="0.0.9"
+ZSHRC_VERSION="1.0.0"
+THEME_NAME="Zsh Troll Themer"
 troll_colors=(91 92 93 94 95 96) # red green yellow blue magenta cyan
+
+# Language system
+typeset -A MESSAGES  # Associative array to store messages
+
+# Ensure .troll_themer directory exists
+[[ ! -d "$HOME/.troll_themer" ]] && mkdir -p "$HOME/.troll_themer"
+[[ ! -d "$HOME/.troll_themer/lang" ]] && mkdir -p "$HOME/.troll_themer/lang"
+
+# Load language configuration
+load_language_config() {
+    local config_file="$HOME/.troll_themer/config"
+    local lang="vi"  # default language
+    
+    # Create default config file if it doesn't exist
+    if [[ ! -f "$config_file" ]]; then
+        cat > "$config_file" << 'EOF'
+# Configuration file for Zsh Troll Themer
+# Set your preferred language here
+
+# Available languages: vi (Vietnamese), en (English)
+# Default language if not set or file not found: vi
+TROLL_LANG="vi"
+
+# You can also set this via environment variable:
+# export TROLL_LANG="en"
+EOF
+    fi
+    
+    # Check environment variable first
+    if [[ -n "$TROLL_LANG" ]]; then
+        lang="$TROLL_LANG"
+    # Then check config file
+    elif [[ -f "$config_file" ]]; then
+        lang=$(grep "^TROLL_LANG=" "$config_file" | cut -d'"' -f2)
+        [[ -z "$lang" ]] && lang="vi"
+    fi
+    
+    echo "$lang"
+}
+
+# Load messages from language file
+load_messages() {
+    local lang="${1:-vi}"
+    local lang_file="$HOME/.troll_themer/lang/${lang}.txt"
+    
+    # Clear existing messages
+    MESSAGES=()
+    
+    # Check if language file exists, fallback to Vietnamese
+    if [[ ! -f "$lang_file" ]]; then
+        lang_file="$HOME/.troll_themer/lang/vi.txt"
+    fi
+    
+    # Create default Vietnamese language file if it doesn't exist
+    if [[ ! -f "$lang_file" ]]; then
+        cat > "$lang_file" << 'EOF'
+# Vietnamese Language Pack for Zsh Troll Themer
+# Format: category:message
+
+welcome:🎉 Welcome to $THEME_NAME! Chúc người đẹp một ngày mới tràn đầy năng lượng nhé! Happy coding😘
+update_disabled:Tính năng cập nhật sẽ được kích hoạt sau khi repository được đổi tên.
+update_repo:Repository mới: https://github.com/iZuminnnn/troll-theme
+
+overtime:Muộn rồi đó má! Code ít thôi, về đi kẻo người ta chờ cơm nguội bây giờ!
+overtime:Giờ này còn ngồi code chi nữa? Công ty có bao cổ phần đâu mà cống hiến dữ vậy!
+overtime:Về đi chứ! Bug thì fix hoài không hết, nhưng thanh xuân mà hết rồi là khỏi fix!
+
+hour_00:Giờ này còn thức làm gì đấy? Định hẹn hò với bug xuyên đêm à?
+hour_08:Cà phê sáng chưa? Hay vẫn đang nạp caffeine bằng stackoverflow?
+hour_12:Ăn trưa chưa? Hay lại định sống bằng niềm tin vào deadline?
+hour_18:Giờ này dev đang code hay đang nhậu?
+hour_22:Giờ này vẫn còn cày à? Tí nữa ngủ luôn trên bàn phím cho coi!
+hour_other:Giờ giấc kỳ lạ quá! Không biết gọi là sáng, trưa, chiều hay tối nữa!
+
+cmd_git_commit:Commit xong rồi thì nhớ push người đẹp!
+cmd_git_push:Push thành công rồi, nghỉ xíu uống miếng nước người đẹp!
+cmd_python:Python thần thánh, chạy thử coi output đẹp chưa người đẹp!
+cmd_ls:Danh sách file đây, cần gì cứ gọi anh người đẹp!
+EOF
+    fi
+    
+    if [[ -f "$lang_file" ]]; then
+        while IFS=':' read -r key value; do
+            # Skip comments and empty lines
+            [[ "$key" =~ ^#.*$ || -z "$key" ]] && continue
+            # Remove quotes from key and trim whitespace
+            key="${key//\"/}"
+            key="${key// /}"
+            value="${value# }"
+            MESSAGES[$key]="$value"
+        done < "$lang_file"
+    fi
+}
+
+# Get message by key
+get_message() {
+    local key="$1"
+    local default_msg="${2:-}"
+    echo "${MESSAGES[$key]:-$default_msg}"
+}
+
+# Get random message from category
+get_random_message() {
+    local category="$1"
+    local messages=()
+    local key
+    
+    # Collect all messages from the category
+    for key in "${(@k)MESSAGES}"; do
+        if [[ "$key" == "$category" ]]; then
+            messages+=("${MESSAGES[$key]}")
+        fi
+    done
+    
+    # Return random message
+    if (( ${#messages[@]} > 0 )); then
+        echo "${messages[$((RANDOM % ${#messages[@]} + 1))]}"
+    fi
+}
+
+# Initialize language system
+CURRENT_LANG=$(load_language_config)
+load_messages "$CURRENT_LANG"
 
 # Function to detect WSL
 detect_wsl() {
@@ -46,17 +176,16 @@ detect_wsl() {
 }
 
 
-# Tối ưu troll theo thời gian
+# Time-based troll optimization
 troll_by_time() {
     local hour=$(date +%H)
     local minute=$(date +%M)
     
-    # Đặt seed cho RANDOM dựa trên thời gian hiện tại (số giây từ epoch)
-    RANDOM=$(date +%s)  # Dùng số giây từ epoch làm seed
+    # Set seed for RANDOM based on current time (seconds from epoch)
+    RANDOM=$(date +%s)  # Use seconds from epoch as seed
     
     local random_color=${troll_colors[$((RANDOM % ${#troll_colors[@]}))]}
     local message
-    local messages
     local chance=$((RANDOM % 100))
     # Check if within 17:30-18:30
     local force_show=${1:-false}
@@ -65,121 +194,86 @@ troll_by_time() {
         force_show_by_time=true
     fi
 
-    # Luôn hiển thị thông điệp khi gọi hàm (bỏ logic xác suất 10% để test dễ hơn)
+    # Always show message when calling function (removed 10% probability logic for easier testing)
     if [[ "$force_show_by_time" == true ]]; then
-        messages=(
-            "Muộn rồi đó má! Code ít thôi, về đi kẻo người ta chờ cơm nguội bây giờ!"
-            "Giờ này còn ngồi code chi nữa? Công ty có bao cổ phần đâu mà cống hiến dữ vậy!"
-            "Về đi chứ! Bug thì fix hoài không hết, nhưng thanh xuân mà hết rồi là khỏi fix!"
-            "Bắt đầu tắt máy đi, đừng để hôm nay lại thành một ngày OT vô nghĩa nữa!"
-            "Deadline quan trọng nhưng người đợi cơm còn quan trọng hơn!"
-            "Tắt máy ngay! Đi về hôn người yêu, ôm con, ăn cơm! Đừng để về nhà chỉ thấy... con mèo!"
-            "Ngồi lại muộn thêm chút nữa là công ty in luôn tên lên bàn phím đấy, về đi!"
-            "Còn ngồi đó hả? Về lẹ đi, đừng để ngày mai công ty phát luôn gối ôm với chăn mền cho tiện!"
-            "Gõ phím hoài không chán hả? Về đi ông ơi, chứ bàn phím nó mòn thì còn thay được, chứ thanh xuân mòn là khỏi sửa!"
-            "Về đi! Đừng để hôm nay thành một ngày OT vô nghĩa, mà lương thì vẫn vậy!"
-            "Ngồi code thêm chút nữa là mai HR gửi luôn hợp đồng thuê công ty làm nhà ở đó!"
-            "Máy tính không cần nghỉ, nhưng ông thì có đó nha! Tắt máy ngay!"
-            "Bug fix hoài không hết, nhưng deadline cuộc đời thì tới nhanh lắm, về đi ông ơi!"
-            "Ngồi lại chút nữa là công ty khắc tên ông lên ghế luôn đó, về đi chứ còn gì nữa!"
-            "Về đi chứ? Công ty có cổ phần cho ông đâu mà cống hiến dữ vậy!"
-            "Gõ phím ít thôi, còn để dành sức mà nắm tay người thương nữa chứ!"
-            "Về lẹ đi! Đừng để về nhà chỉ thấy... con mèo nhìn ông với ánh mắt đầy thương hại!"
-            "Ông còn gõ phím nữa là cái bàn phím nó kiện ông lên công đoàn đó!"
-            "Về đi! Đừng để ngày mai đồng nghiệp tưởng ông là nhân viên bảo vệ ca đêm!"
-            "OT hoài không làm ông giàu lên đâu, nhưng chắc chắn làm ông già đi!"
-            "Máy tính thì có thể nâng cấp, nhưng cột sống ông mà hỏng thì chịu luôn!"
-            "Code mãi không xong thì mai code tiếp, chứ mất ngủ là mai khỏi code luôn!"
-            "Sếp không thấy ông OT đâu, nhưng bác sĩ thần kinh thì sắp thấy đó!"
-            "Về đi chứ? Hay định debug luôn cả cuộc đời?"
-            "Bug có thể chờ, nhưng người yêu ông thì không đâu!"
-            "Về lẹ đi! Đừng để hôm sau đi làm với đôi mắt thâm hơn cả dark mode!"
-            "Công ty không đóng cửa, nhưng quán cơm ông hay ăn thì sắp đóng rồi đó!"
-            "Fix bug xong chưa? Chưa thì mai fix tiếp, chứ về trễ nữa là chỉ còn mỗi bug làm bạn!"
-            "Ngồi thêm tí nữa là mai HR phát luôn huy chương 'nhân viên kiên trì' cho ông đó!"
-            "Deadline dí cũng không nhanh bằng tuổi xuân trôi đâu, về lẹ còn kịp!"
-        )
-
+        message=$(get_random_message "overtime")
     elif (( chance < 10 )) || [[ "$force_show" == true ]]; then
         case $hour in
-            00|01) messages=("Giờ này còn thức làm gì đấy? Định hẹn hò với bug xuyên đêm à?" "Ngủ sớm đi má, chứ code khuya dễ commit mấy dòng regret lắm!") ;;
-            02|03) messages=("Ủa, thức khuya vậy? Có phải đang debug một lỗi mà Google cũng từ chối trả lời không?" "Giờ này vẫn còn code là trình cao thủ lắm nha!") ;;
-            04|05) messages=("Trời sắp sáng rồi, ngủ chưa hay đang luyện công phu 'bug bám dai'?" "Gà gáy rồi mà bug vẫn chưa chịu đi ngủ hả?") ;;
-            06|07) messages=("Dậy chưa? Hay là vẫn quấn chăn trong khi bug đang chờ kìa!" "Sáng rồi, mở VS Code hay mở bát trước đây?") ;;
-            08|09) messages=("Cà phê sáng chưa? Hay vẫn đang nạp caffeine bằng stackoverflow?" "Bữa sáng nay có gì? Đừng nói lại là 'fix bug' nhé!") ;;
-            10|11) messages=("Tầm này chắc vẫn đang họp đúng không? 'Nói ít code nhiều' nhớ!" "Công việc ổn không? Hay là tâm trạng còn hỗn loạn hơn git merge?") ;;
-            12|13) messages=("Ăn trưa chưa? Hay lại định sống bằng niềm tin vào deadline?" "Bug có nghỉ trưa không? Không! Vậy nên dev cũng không!") ;;
-            14|15) messages=("Tầm này dễ đơ người lắm, mà code đơ còn nhanh hơn dev!" "Trà chiều chưa? Hay còn bận fix bug mà chưa nhấp môi giọt nào?") ;;
-            16|17) messages=("Chiều rồi, năng lượng vẫn còn hay đã tụt mood theo bug?" "Code chiều hay dễ dính bug, cẩn thận kẻo sáng mai fix không kịp!") ;;
-            18|19) messages=("Giờ này dev đang code hay đang nhậu?" "Cẩn thận nhé, code ban tối dễ commit dòng regret lắm!") ;;
-            20|21) messages=("Nay có định chơi game tí cho đỡ stress không hay lại ôm bug cả tối?" "Code xong rồi thì nghỉ ngơi tí đi! Đừng để bug cướp luôn tuổi trẻ!") ;;
-            22|23) messages=("Giờ này vẫn còn cày à? Tí nữa ngủ luôn trên bàn phím cho coi!" "Làm dev kiểu này mai dậy là thành zombie nhé!") ;;
-            *) messages=("Giờ giấc kỳ lạ quá! Không biết gọi là sáng, trưa, chiều hay tối nữa!") ;;
+            00|01) message=$(get_random_message "hour_00") ;;
+            02|03) message=$(get_random_message "hour_02") ;;
+            04|05) message=$(get_random_message "hour_04") ;;
+            06|07) message=$(get_random_message "hour_06") ;;
+            08|09) message=$(get_random_message "hour_08") ;;
+            10|11) message=$(get_random_message "hour_10") ;;
+            12|13) message=$(get_random_message "hour_12") ;;
+            14|15) message=$(get_random_message "hour_14") ;;
+            16|17) message=$(get_random_message "hour_16") ;;
+            18|19) message=$(get_random_message "hour_18") ;;
+            20|21) message=$(get_random_message "hour_20") ;;
+            22|23) message=$(get_random_message "hour_22") ;;
+            *) message=$(get_message "hour_other") ;;
         esac
     fi
-    # Chọn ngẫu nhiên một thông báo từ danh sách
-    if [[ -n "$messages" ]]; then
-        message=${messages[$(((RANDOM % ${#messages[@]}) + 1))]}
-    fi
+    
     if [[ -n "$message" ]]; then
         echo -e "\e[95m${message}\e[0m"
     fi
 }
 
 
-# Tối ưu troll command
+# Optimized troll command
 troll_cmd() {
     local cmd="$1" message color
     case "$cmd" in
-        *git\ commit*) message="Commit xong rồi thì nhớ push người đẹp!" color=93 ;;
-        *git\ push*) message="Push thành công rồi, nghỉ xíu uống miếng nước người đẹp!" color=94 ;;
-        *git\ st*|*git\ status*) message="Check status hoài, nhìn thấy thành quả chưa người đẹp?" color=92 ;;
-        *git\ pull*) message="Pull code về rồi, nhớ test kỹ người đẹp!" color=91 ;;
-        *git\ merge*) message="Merge xong nhớ đọc log nha người đẹp!" color=95 ;;
-        *git\ rebase*) message="Rebase xong nhìn lại lịch sử commit có đẹp không người đẹp?" color=96 ;;
-        *git\ log*) message="Đọc log có thấy lỗi ai gây ra không người đẹp?" color=93 ;;
-        *git\ diff*) message="Xem diff đi, có gì bất ngờ không người đẹp?" color=92 ;;
-        *git\ reset*) message="Reset nhẹ tay thôi người đẹp, đừng để mất công sức nha!" color=91 ;;
-        *git\ cherry-pick*) message="Chọn commit kỹ nha người đẹp, đừng pick nhầm drama!" color=95 ;;
-        *python*) message="Python thần thánh, chạy thử coi output đẹp chưa người đẹp!" color=95 ;;
-        *pip*) message="Pip install xong rồi, dependencies đủ chưa người đẹp?" color=92 ;;
-        *npm\ install*) message="npm install xong rồi, nhớ chạy thử coi chạy mượt không người đẹp!" color=91 ;;
-        *npm\ start*) message="Server khởi động rồi, kiểm tra UI chưa người đẹp?" color=94 ;;
-        *npm\ run\ build*) message="Build xong, lên production chưa người đẹp?" color=95 ;;
-        *yarn*) message="Dùng yarn à? Developer có gu nha người đẹp!" color=93 ;;
-        *rm\ -rf*) message="Xóa xong nhớ kiểm tra, đừng để mất gì quan trọng nha người đẹp!" color=96 ;;
-        *mv*) message="Di chuyển file cẩn thận nha người đẹp, đừng để mất dấu!" color=92 ;;
-        *cp*) message="Copy xong nhớ check lại, đừng để thiếu người đẹp!" color=94 ;;
-        *cd*) message="Đi đúng thư mục rồi chứ? Làm việc hiệu quả nha người đẹp!" color=93 ;;
-        *ls*) message="Danh sách file đây, cần gì cứ gọi anh người đẹp!" color=92 ;;
-        *cat*) message="Mở file ra rồi, đọc hiểu hết chưa người đẹp?" color=94 ;;
-        *vim*) message="Vào Vim rồi, nhớ cách thoát chưa người đẹp? 😆" color=91 ;;
-        *nano*) message="Dùng nano à? Gọn nhẹ dễ dùng nè người đẹp!" color=95 ;;
-        *docker\ build*) message="Docker build xong rồi, giờ chạy thử nha người đẹp!" color=94 ;;
-        *docker\ run*) message="Container chạy rồi, mở terminal check thử nha người đẹp!" color=95 ;;
-        *docker\ ps*) message="Xem container kìa, có chạy mượt không người đẹp?" color=92 ;;
-        *docker\ stop*) message="Dừng container rồi, có định bật lại không người đẹp?" color=91 ;;
-        *sudo*) message="Sudo thần thánh, cẩn thận quyền lực tối cao nha người đẹp!" color=91 ;;
-        *chmod*) message="Set quyền xong rồi, test lại nha người đẹp!" color=93 ;;
-        *chown*) message="Chuyển quyền sở hữu rồi, có đúng chủ chưa người đẹp?" color=94 ;;
-        *scp*) message="Chuyển file qua SSH nè, hy vọng nhanh gọn người đẹp!" color=92 ;;
-        *rsync*) message="Đồng bộ file rồi, đừng để thiếu gì nha người đẹp!" color=95 ;;
-        *kill*) message="Kill process rồi, có chắc nó không chạy lại không người đẹp?" color=91 ;;
-        *ps\ aux*) message="Danh sách process đây, tìm thủ phạm ngốn CPU chưa người đẹp?" color=93 ;;
-        *htop*) message="Mở htop rồi, nhìn load CPU có xanh mặt không người đẹp?" color=94 ;;
-        *df\ -h*) message="Check disk xong, có cần dọn rác không người đẹp?" color=92 ;;
-        *free\ -m*) message="Xem RAM còn đủ sống không người đẹp?" color=95 ;;
-        *whoami*) message="Là ai? Là chính mình chứ ai nữa người đẹp!" color=96 ;;
-        *date*) message="Giờ này còn code à? Nghỉ ngơi chút đi người đẹp!" color=91 ;;
-        *uptime*) message="Máy chạy lâu chưa? Có cần restart không người đẹp?" color=94 ;;
-        *reboot*) message="Restart máy à? Hít thở sâu rồi hãy nhấn Enter người đẹp!" color=93 ;;
-        *shutdown*) message="Tắt máy thật hả? Ghi nhớ commit xong chưa người đẹp?" color=92 ;;
+        *git\ commit*) message=$(get_message "cmd_git_commit") color=93 ;;
+        *git\ push*) message=$(get_message "cmd_git_push") color=94 ;;
+        *git\ st*|*git\ status*) message=$(get_message "cmd_git_status") color=92 ;;
+        *git\ pull*) message=$(get_message "cmd_git_pull") color=91 ;;
+        *git\ merge*) message=$(get_message "cmd_git_merge") color=95 ;;
+        *git\ rebase*) message=$(get_message "cmd_git_rebase") color=96 ;;
+        *git\ log*) message=$(get_message "cmd_git_log") color=93 ;;
+        *git\ diff*) message=$(get_message "cmd_git_diff") color=92 ;;
+        *git\ reset*) message=$(get_message "cmd_git_reset") color=91 ;;
+        *git\ cherry-pick*) message=$(get_message "cmd_git_cherry_pick") color=95 ;;
+        *python*) message=$(get_message "cmd_python") color=95 ;;
+        *pip*) message=$(get_message "cmd_pip") color=92 ;;
+        *npm\ install*) message=$(get_message "cmd_npm_install") color=91 ;;
+        *npm\ start*) message=$(get_message "cmd_npm_start") color=94 ;;
+        *npm\ run\ build*) message=$(get_message "cmd_npm_build") color=95 ;;
+        *yarn*) message=$(get_message "cmd_yarn") color=93 ;;
+        *rm\ -rf*) message=$(get_message "cmd_rm") color=96 ;;
+        *mv*) message=$(get_message "cmd_mv") color=92 ;;
+        *cp*) message=$(get_message "cmd_cp") color=94 ;;
+        *cd*) message=$(get_message "cmd_cd") color=93 ;;
+        *ls*) message=$(get_message "cmd_ls") color=92 ;;
+        *cat*) message=$(get_message "cmd_cat") color=94 ;;
+        *vim*) message=$(get_message "cmd_vim") color=91 ;;
+        *nano*) message=$(get_message "cmd_nano") color=95 ;;
+        *docker\ build*) message=$(get_message "cmd_docker_build") color=94 ;;
+        *docker\ run*) message=$(get_message "cmd_docker_run") color=95 ;;
+        *docker\ ps*) message=$(get_message "cmd_docker_ps") color=92 ;;
+        *docker\ stop*) message=$(get_message "cmd_docker_stop") color=91 ;;
+        *sudo*) message=$(get_message "cmd_sudo") color=91 ;;
+        *chmod*) message=$(get_message "cmd_chmod") color=93 ;;
+        *chown*) message=$(get_message "cmd_chown") color=94 ;;
+        *scp*) message=$(get_message "cmd_scp") color=92 ;;
+        *rsync*) message=$(get_message "cmd_rsync") color=95 ;;
+        *kill*) message=$(get_message "cmd_kill") color=91 ;;
+        *ps\ aux*) message=$(get_message "cmd_ps") color=93 ;;
+        *htop*) message=$(get_message "cmd_htop") color=94 ;;
+        *df\ -h*) message=$(get_message "cmd_df") color=92 ;;
+        *free\ -m*) message=$(get_message "cmd_free") color=95 ;;
+        *whoami*) message=$(get_message "cmd_whoami") color=96 ;;
+        *date*) message=$(get_message "cmd_date") color=91 ;;
+        *uptime*) message=$(get_message "cmd_uptime") color=94 ;;
+        *reboot*) message=$(get_message "cmd_reboot") color=93 ;;
+        *shutdown*) message=$(get_message "cmd_shutdown") color=92 ;;
         *) return ;;
     esac
-    echo -e "\e[${color}m${message}\e[0m"
+    [[ -n "$message" ]] && echo -e "\e[${color}m${message}\e[0m"
 }
 
-# Các hàm thông tin
+# Information functions
 venv_info() { [[ -n $VIRTUAL_ENV ]] && echo "\e[93m🐍 ($(basename $VIRTUAL_ENV))\e[0m"; }
 git_info() {
     git rev-parse --is-inside-work-tree &>/dev/null || return
@@ -193,7 +287,7 @@ time_icon() {
     esac
 }
 
-# Function to check internet connection
+
 check_internet() {
     local ping_cmd
     case "$OSTYPE" in
@@ -213,84 +307,35 @@ check_internet() {
     return $?
 }
 
-# Tối ưu weather
-typeset -g last_weather_update=0 cached_weather_icon="🌍 ?°C"
-weather_icon() {
-    local current_time=$(date +%s)
-    # Only update if it's been more than 5 minutes and we have internet
-    if ((current_time - last_weather_update >= 300)) && check_internet; then
-        local weather_data=$(curl -s "wttr.in?format=%C+%t&location=hanoi&lang=en" 2>/dev/null || echo "unknown+?°C")
-        
-        # Debug: Print raw weather data
-        # echo "Raw weather data: $weather_data" >&2
-        
-        # Extract weather and temperature more carefully
-        local weather=$(echo "$weather_data" | sed 's/+[0-9]*°C//' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-        local temp=$(echo "$weather_data" | grep -o '+[0-9]*°C' | sed 's/+//')
-        
-        # Debug: Print processed weather and temp
-        # echo "Processed weather: $weather" >&2
-        # echo "Processed temp: $temp" >&2
-        
-        # Clean up weather string
-        weather=$(echo "$weather" | tr '[:upper:]' '[:lower:]')
-        
-        cached_weather_icon=$(
-            case "$weather" in
-                *"sunny"*) echo "\e[93m☀️ Nắng đẹp, ra ngoài hít drama đi! ${temp}\e[0m" ;;
-                *"clear"*) echo "\e[33m🌞 Trời trong, tâm hồn cũng nên thế! ${temp}\e[0m" ;;
-                *"partly cloudy"*) echo "\e[37m⛅ Trời nửa nắng nửa mơ màng! ${temp}\e[0m" ;;
-                *"cloudy"*) echo "\e[90m☁️ Trời âm u như deadline gần kề! ${temp}\e[0m" ;;
-                *"overcast"*) echo "\e[90m🌥️ U ám quá, pha trà ngồi chill đi! ${temp}\e[0m" ;;
-                *"mist"*|*"fog"*) echo "\e[37m🌫️ Sương mù, cẩn thận lạc lối! ${temp}\e[0m" ;;
-                *"light rain"*|*"drizzle"*) echo "\e[94m🌦️ Mưa lất phất, lãng mạn ghê! ${temp}\e[0m" ;;
-                *"rain"*|*"shower"*|*"moderate rain"*) echo "\e[94m🌧️ Mưa rồi, ở nhà code thôi! ${temp}\e[0m" ;;
-                *"heavy rain"*|*"heavy shower"*) echo "\e[34m⛈️ Mưa to, trùm chăn ngủ tiếp! ${temp}\e[0m" ;;
-                *"thunderstorm"*|*"thundery"*) echo "\e[34m🌩️ Sấm chớp, đừng ra ngoài nhé! ${temp}\e[0m" ;;
-                *"snow"*) echo "\e[97m❄️ Tuyết rơi, mơ về Đà Lạt à? ${temp}\e[0m" ;;
-                *"light snow"*|*"snow shower"*) echo "\e[97m🌨️ Tuyết nhẹ, lạnh mà vui! ${temp}\e[0m" ;;
-                *"hail"*) echo "\e[96m🌧️❄️ Mưa đá, trốn trong nhà thôi! ${temp}\e[0m" ;;
-                *"sleet"*) echo "\e[96m🌧️🌨️ Mưa tuyết, thời tiết kỳ lạ thật! ${temp}\e[0m" ;;
-                *) echo "\e[32m🌍 Trời gì mà lạ thế không biết! ${temp}\e[0m" ;;
-            esac
-        )
-        last_weather_update=$current_time
-    elif ! check_internet && ((current_time - last_weather_update >= 1800)); then
-        # If no internet for 30 minutes, show offline message
-        cached_weather_icon="\e[90m📵 Không có kết nối mạng để cập nhật thời tiết\e[0m"
-        last_weather_update=$current_time
-    fi
-    echo -e "$cached_weather_icon"
-}
 
 # Function to check for and download zshrc updates
 update_zshrc() {
     if ! check_internet; then
-        echo -e "\e[91mKhông thể kết nối mạng. Vui lòng thử lại sau.\e[0m"
+        echo -e "\e[91m Can't connect to the network. Please try again later.\e[0m"
         return 1
     fi
     
     # Get remote version
     local remote_version=$(curl -s https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/version.txt 2>/dev/null)
     if [[ -z "$remote_version" ]]; then
-        echo -e "\e[91mKhông thể tải thông tin phiên bản.\e[0m"
+        echo -e "\e[91mUnable to download version information.\e[0m"
         return 1
     fi
     
     # Compare versions (simple string comparison)
     if [[ "$remote_version" != "$ZSHRC_VERSION" ]]; then
-        echo -e "\e[92mĐã phát hiện phiên bản mới: $remote_version (hiện tại: $ZSHRC_VERSION)\e[0m"
-        echo -e "Đang tải xuống bản cập nhật..."
+        echo -e "\e[92mNew version has been discovered: $remote_version (Present: $ZSHRC_VERSION)\e[0m"
+        echo -e "Download update ..."
         
         # Backup current file
         cp ~/.zshrc ~/.zshrc.backup
         
         # Download new version
         if curl -s -o ~/.zshrc https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.zshrc; then
-            echo -e "\e[92mCập nhật thành công! Đã sao lưu phiên bản cũ tại ~/.zshrc.backup\e[0m"
-            echo -e "Khởi động lại shell để áp dụng thay đổi, hoặc chạy: source ~/.zshrc"
+            echo -e "\e[92mSuccess update! Backed the old version at ~/.zshrc.backup\e[0m"
+            echo -e "Restart Shell to apply changes, or run: source ~/.zshrc"
         else
-            echo -e "\e[91mCập nhật thất bại. Vui lòng thử lại sau.\e[0m"
+            echo -e "\e[91mUpdate failure. Please try again later.\e[0m"
             # Restore backup
             cp ~/.zshrc.backup ~/.zshrc
         fi
@@ -300,14 +345,30 @@ update_zshrc() {
 # Add alias for easier updating
 alias update-zshrc="update_zshrc"
 last_troll_time=0
-troll_interval=$((5 * 60))  # 5 phút
+troll_interval=$((5 * 60))  # 5 minutes
+
+# Mode management - Serious mode to disable trolling temporarily
+check_serious_mode() {
+    [[ "$TROLL_MODE" == "serious" || "$MODE" == "serious" ]]
+}
+
+# Aliases for mode switching
+alias serious="export TROLL_MODE=serious && echo -e '\e[93m🔇 Serious mode activated. Trolling disabled.\e[0m'"
+alias troll="unset TROLL_MODE && echo -e '\e[95m🎭 Troll mode activated. Let the fun begin!\e[0m'"
+alias mode-status="[[ -n \$TROLL_MODE ]] && echo -e '\e[93mCurrent mode: \$TROLL_MODE\e[0m' || echo -e '\e[95mCurrent mode: troll (default)\e[0m'"
+
 # Prompt hooks
 
 preexec() {
     timer=$(( $(date +%s%0N) / 1000000 ))
     last_cmd="$1"
 
-    # Gọi troll_by_time chỉ sau mỗi khoảng thời gian nhất định
+    # Skip trolling if in serious mode
+    if check_serious_mode; then
+        return
+    fi
+
+    # Call troll_by_time only after a certain time interval
     current_time=$(date +%s)
     if (( current_time - last_troll_time >= troll_interval )); then
         troll_time_message=$(troll_by_time)
@@ -315,36 +376,36 @@ preexec() {
         last_troll_time=$current_time
     fi
 
-    # Gọi troll_cmd
+    # Call troll_cmd
     troll_message=$(troll_cmd "$last_cmd")
     [[ -n "$troll_message" ]] && echo "$troll_message"
 }
 
 precmd() {
-    PS1="$(time_icon) %F{cyan}%n@%m %F{magenta}%~%f $(venv_info) $(git_info)
-%F{green}➜ %f"
+    PS1="%F{green}╭─$(time_icon) %F{cyan}%n@%m %F{magenta}%~%f $(venv_info) $(git_info) %F{red}~ %D{%H:%M:%S}%f
+%F{green}╰─➜  %f"
     
     if [[ -n $timer ]]; then
         local now=$(( $(date +%s%0N) / 1000000 ))
-        RPROMPT="%F{cyan}$((now-timer))ms%f"
+        RPROMPT="%F{cyan}[$((now-timer))ms]%f"
         unset timer
     fi
     
-    # Loại bỏ cpu_troll vì tốn thời gian xử lý
+    # Remove cpu_troll because it's time-consuming to process
     unset last_cmd
 }
 
-# Clear custom
+# Custom clear function
 my_clear() {
     command clear
     detect_wsl
-    if check_internet; then
-      echo "Thời tiết hôm nay: $(weather_icon)"
+    # Only show troll message if not in serious mode
+    if ! check_serious_mode; then
+        troll_by_time true
     fi
-    troll_by_time true
 }
 
-# Cấu hình cuối
+# Final configuration
 autoload -U colors && colors
 
 alias clear="my_clear"
@@ -357,39 +418,49 @@ bindkey '^[[5~' history-search-backward
 bindkey '^[[6~' history-search-forward
 bindkey '^[[A' up-line-or-search
 bindkey '\C-h' backward-kill-word
-# Xóa nhanh toàn bộ dòng (trước và sau con trỏ)
-bindkey '^U' backward-kill-line  # Ctrl + U: Xóa từ con trỏ về đầu dòng  
-bindkey '^K' kill-line           # Ctrl + K: Xóa từ con trỏ về cuối dòng 
-# Di chuyển đầu/cuối dòng  
-bindkey '^[a' beginning-of-line   # Alt + A: Nhảy về đầu dòng  
-bindkey '^[e' end-of-line         # Alt + E: Nhảy về cuối dòng  
+# Quick delete entire line (before and after cursor)
+bindkey '^U' backward-kill-line  # Ctrl + U: Delete from cursor to beginning of line  
+bindkey '^K' kill-line           # Ctrl + K: Delete from cursor to end of line 
+# Move to beginning/end of line  
+bindkey '^[a' beginning-of-line   # Alt + A: Jump to beginning of line  
+bindkey '^[e' end-of-line         # Alt + E: Jump to end of line  
 
 # Loading zsh-autosuggestions
 if [[ -f ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
     source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
 
-# Khởi tạo - check update đầu tiên, sau đó mới hiển thị quotes và thời tiết
-{
+# Initialization - check update first, then display quotes
+init_theme() {
+  # Skip welcome messages if in serious mode
+  if check_serious_mode; then
+    return
+  fi
+  
+  # Display welcome message directly without using get_message to avoid circular dependency
+  echo -e "\e[93m🎉 Welcome to $THEME_NAME! Happy coding! 😘\e[0m"
   # Get last update check time
-  LAST_UPDATE_CHECK_FILE="${HOME}/.zsh_update_check"
+  LAST_UPDATE_CHECK_FILE="$HOME/.troll_themer/update"
   LAST_CHECK=0
   [[ -f "$LAST_UPDATE_CHECK_FILE" ]] && LAST_CHECK=$(cat "$LAST_UPDATE_CHECK_FILE")
   
   CURRENT_DATE=$(date +%Y-%m-%d)
   # Check if the date has changed
   if [[ "$CURRENT_DATE" != "$LAST_CHECK" ]]; then
-    echo -e "\e[93mChúc người đẹp một ngày mới tràn đầy năng lượng nhé! Happy coding😘\e[0m"
+    # remove .zsh_update_check file
+    rm -f .zsh_update_check
+    # Display welcome message
+    echo -e "\e[93m$(get_message welcome)\e[0m"
     # Update timestamp first to prevent frequent checks
     echo "$CURRENT_DATE" > "$LAST_UPDATE_CHECK_FILE"
     # Check for updates first
     update_zshrc
   fi
+  
+  # Display WSL info and troll message
+  detect_wsl
+  troll_by_time true
 } 
 
-# Only show weather if we have internet
-detect_wsl
-if check_internet; then
-    echo "Thời tiết hôm nay: $(weather_icon)"
-fi
-troll_by_time true
+# Call initialization only if this is an interactive shell
+[[ $- == *i* ]] && init_theme
