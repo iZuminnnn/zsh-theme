@@ -18,7 +18,7 @@ A dynamic, humorous Vietnamese developer-focused Zsh theme with multi-language s
 - 💬 **70+ contextual messages** for different times and commands
 
 ## 🚀 Quick Start
-
+**Note: you need download zsh first:** https://packages.msys2.org/packages/zsh
 1. **Create .zshrc:**
    ```bash
    curl -s -o ~/.zshrc https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.zshrc && mkdir -p "$HOME/.troll_themer/lang"
