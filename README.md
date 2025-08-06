@@ -19,12 +19,16 @@ A dynamic, humorous Vietnamese developer-focused Zsh theme with multi-language s
 
 ## 🚀 Quick Start
 
-1. **Clone the repository:**
+1. **Create .zshrc:**
    ```bash
-   git clone https://github.com/iZuminnnn/troll-theme.git
-   cd troll-theme
+   curl -s -o ~/.zshrc https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.zshrc && mkdir -p "$HOME/.troll_themer/lang"
    ```
-
+   ```bash
+   curl -s -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.troll_themer/config
+   ```
+   ```bash
+   touch "$HOME/.troll_themer/lang/vi.txt" && touch "$HOME/.troll_themer/lang/en.txt" && curl -s -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.troll_themer/lang/vi.txt && curl -s -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.troll_themer/lang/en.txt
+   ```
 2. **Source the theme:**
    ```bash
    source .zshrc
