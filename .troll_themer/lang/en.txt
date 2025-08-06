@@ -3,6 +3,7 @@
 
 # Welcome message
 welcome:🎉 Have an amazing day full of energy! Happy coding😘
+tip_mode:💡 Tip: Use Alias 'serious' to enter the serious mode, or 'troll' to turn on.
 
 # Update messages
 update_disabled:Update feature will be activated after repository rename.

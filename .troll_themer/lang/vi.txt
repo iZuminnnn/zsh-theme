@@ -3,6 +3,7 @@
 
 # Welcome message
 welcome:🎉 Chúc người đẹp một ngày mới tràn đầy năng lượng nhé! Happy coding😘
+tip_mode:💡 Tip: Sử dụng alias 'serious' để vào mode nghiêm túc, hoặc 'troll' để bật lại.
 
 # Overtime messages
 overtime:Muộn rồi đó má! Code ít thôi, về đi kẻo người ta chờ cơm nguội bây giờ!

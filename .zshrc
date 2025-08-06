@@ -91,9 +91,8 @@ load_messages() {
 # Vietnamese Language Pack for Zsh Troll Themer
 # Format: category:message
 
-welcome:🎉 Welcome to $THEME_NAME! Chúc người đẹp một ngày mới tràn đầy năng lượng nhé! Happy coding😘
-update_disabled:Tính năng cập nhật sẽ được kích hoạt sau khi repository được đổi tên.
-update_repo:Repository mới: https://github.com/iZuminnnn/troll-theme
+welcome:🎉 Chúc người đẹp một ngày mới tràn đầy năng lượng nhé! Happy coding😘
+tip_mode:💡 Tip: Sử dụng alias 'serious' để vào mode nghiêm túc, hoặc 'troll' để bật lại.
 
 overtime:Muộn rồi đó má! Code ít thôi, về đi kẻo người ta chờ cơm nguội bây giờ!
 overtime:Giờ này còn ngồi code chi nữa? Công ty có bao cổ phần đâu mà cống hiến dữ vậy!
@@ -327,17 +326,99 @@ update_zshrc() {
         echo -e "\e[92mNew version has been discovered: $remote_version (Present: $ZSHRC_VERSION)\e[0m"
         echo -e "Download update ..."
         
-        # Backup current file
+        # Backup current files
         cp ~/.zshrc ~/.zshrc.backup
+        echo -e "\e[93m📦 Backed up .zshrc to ~/.zshrc.backup\e[0m"
         
-        # Download new version
+        # Backup .troll_themer folder if it exists
+        if [[ -d "$HOME/.troll_themer" ]]; then
+            cp -r "$HOME/.troll_themer" "$HOME/.troll_themer.backup"
+            echo -e "\e[93m📦 Backed up .troll_themer to ~/.troll_themer.backup\e[0m"
+        else
+            echo -e "\e[94m📁 .troll_themer folder not found - will create new one\e[0m"
+        fi
+        
+        # Download new .zshrc version
         if curl -s -o ~/.zshrc https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.zshrc; then
-            echo -e "\e[92mSuccess update! Backed the old version at ~/.zshrc.backup\e[0m"
+            echo -e "\e[92m✅ .zshrc updated successfully!\e[0m"
+            
+            # Download .troll_themer folder
+            echo -e "\e[96m📥 Downloading .troll_themer configuration...\e[0m"
+            
+            # Create directory structure with error checking
+            if ! mkdir -p "$HOME/.troll_themer/lang"; then
+                echo -e "\e[91m❌ Failed to create .troll_themer directories\e[0m"
+                return 1
+            fi
+            
+            # Download files with progress indication and error checking
+            echo -e "\e[94m  ⬇️  Downloading config file...\e[0m"
+            if ! curl -s -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.troll_themer/config; then
+                echo -e "\e[91m❌ Failed to download config file\e[0m"
+            fi
+            
+            echo -e "\e[94m  ⬇️  Downloading Vietnamese language pack...\e[0m"
+            if ! curl -s -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.troll_themer/lang/vi.txt; then
+                echo -e "\e[91m❌ Failed to download Vietnamese language pack\e[0m"
+            fi
+            
+            echo -e "\e[94m  ⬇️  Downloading English language pack...\e[0m"
+            if ! curl -s -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.troll_themer/lang/en.txt; then
+                echo -e "\e[91m❌ Failed to download English language pack\e[0m"
+            fi
+            
+            # Verify downloaded files
+            echo -e "\e[95m🔍 Verifying downloaded files...\e[0m"
+            local success=true
+            [[ ! -f "$HOME/.troll_themer/config" ]] && echo -e "\e[91m❌ Config file missing\e[0m" && success=false
+            [[ ! -f "$HOME/.troll_themer/lang/vi.txt" ]] && echo -e "\e[91m❌ Vietnamese language pack missing\e[0m" && success=false
+            [[ ! -f "$HOME/.troll_themer/lang/en.txt" ]] && echo -e "\e[91m❌ English language pack missing\e[0m" && success=false
+            
+            if [[ "$success" == true ]]; then
+                echo -e "\e[92m✅ All files downloaded successfully!\e[0m"
+                echo -e "\e[92m🎉 Update completed! Backups saved at ~/.zshrc.backup$([ -d "$HOME/.troll_themer.backup" ] && echo " and ~/.troll_themer.backup")\e[0m"
+            else
+                echo -e "\e[93m⚠️  Update partially completed - some files may be missing\e[0m"
+                echo -e "\e[92m🎉 Update completed with warnings! Backups saved at ~/.zshrc.backup$([ -d "$HOME/.troll_themer.backup" ] && echo " and ~/.troll_themer.backup")\e[0m"
+            fi
             echo -e "Restart Shell to apply changes, or run: source ~/.zshrc"
         else
-            echo -e "\e[91mUpdate failure. Please try again later.\e[0m"
-            # Restore backup
+            echo -e "\e[91m❌ Failed to download .zshrc file. Rolling back...\e[0m"
+            # Restore .zshrc backup
             cp ~/.zshrc.backup ~/.zshrc
+            echo -e "\e[93m🔄 Restored .zshrc from backup\e[0m"
+            
+            # Restore .troll_themer backup if it exists
+            if [[ -d "$HOME/.troll_themer.backup" ]]; then
+                rm -rf "$HOME/.troll_themer"
+                mv "$HOME/.troll_themer.backup" "$HOME/.troll_themer"
+                echo -e "\e[93m🔄 Restored .troll_themer from backup\e[0m"
+            fi
+            
+            echo -e "\e[91m❌ Update failed. All files have been restored to previous state.\e[0m"
+            return 1
+        fi
+    else
+        echo -e "\e[92m✅ You are already using the latest version ($ZSHRC_VERSION)\e[0m"
+        
+        # Check if .troll_themer folder exists and offer to repair if missing
+        if [[ ! -d "$HOME/.troll_themer" ]]; then
+            echo -e "\e[93m⚠️  .troll_themer folder is missing. Would you like to download it? (y/N)\e[0m"
+            read -r response
+            if [[ "$response" =~ ^[Yy]$ ]]; then
+                echo -e "\e[96m📥 Downloading .troll_themer configuration...\e[0m"
+                
+                # Create directory structure
+                mkdir -p "$HOME/.troll_themer/lang"
+                
+                # Download files
+                curl -s -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.troll_themer/config
+                curl -s -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.troll_themer/lang/vi.txt
+                curl -s -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.troll_themer/lang/en.txt
+                
+                echo -e "\e[92m✅ .troll_themer folder downloaded successfully!\e[0m"
+                echo -e "Run: source ~/.zshrc to reload configuration"
+            fi
         fi
     fi
 }
@@ -398,10 +479,15 @@ precmd() {
 # Custom clear function
 my_clear() {
     command clear
+    # Display welcome message and tips only if not in serious mode
+
     detect_wsl
     # Only show troll message if not in serious mode
     if ! check_serious_mode; then
         troll_by_time true
+    else
+        echo -e "\e[93m$(get_message welcome)\e[0m"
+        echo -e "\e[95m$(get_message tip_mode)\e[0m"
     fi
 }
 
@@ -437,8 +523,6 @@ init_theme() {
     return
   fi
   
-  # Display welcome message directly without using get_message to avoid circular dependency
-  echo -e "\e[93m🎉 Welcome to $THEME_NAME! Happy coding! 😘\e[0m"
   # Get last update check time
   LAST_UPDATE_CHECK_FILE="$HOME/.troll_themer/update"
   LAST_CHECK=0
@@ -447,14 +531,32 @@ init_theme() {
   CURRENT_DATE=$(date +%Y-%m-%d)
   # Check if the date has changed
   if [[ "$CURRENT_DATE" != "$LAST_CHECK" ]]; then
-    # remove .zsh_update_check file
-    rm -f .zsh_update_check
+    # remove .zsh_update_check file from home directory
+    rm -f "$HOME/.zsh_update_check"
+    
+    # check and create .troll_themer directory structure if needed
+    if [[ ! -d "$HOME/.troll_themer/lang" ]]; then
+      mkdir -p "$HOME/.troll_themer/lang"
+    fi
+    
+    # check if required language files exist, create empty files if missing
+    if [[ ! -f "$HOME/.troll_themer/lang/vi.txt" ]]; then
+      touch "$HOME/.troll_themer/lang/vi.txt"
+    fi
+    if [[ ! -f "$HOME/.troll_themer/lang/en.txt" ]]; then
+      touch "$HOME/.troll_themer/lang/en.txt"
+    fi
+    
     # Display welcome message
     echo -e "\e[93m$(get_message welcome)\e[0m"
     # Update timestamp first to prevent frequent checks
     echo "$CURRENT_DATE" > "$LAST_UPDATE_CHECK_FILE"
     # Check for updates first
     update_zshrc
+  else
+    # Display welcome message directly without using get_message to avoid circular dependency
+    echo -e "\e[93m🎉 Welcome to $THEME_NAME! Happy coding! 😘\e[0m"
+    echo -e "\e[95m$(get_message tip_mode)\e[0m"
   fi
   
   # Display WSL info and troll message
