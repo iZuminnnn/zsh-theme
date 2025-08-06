@@ -33,8 +33,18 @@ A dynamic, humorous Vietnamese developer-focused Zsh theme with multi-language s
    ```bash
    source .zshrc
    ```
-
-3. **Enjoy the trolling!** 🎉
+3. ** Set zsh auto run when open terminal:**
+    - Open bashrc file
+       ```bash
+      nano ~/.bashrc
+      ```
+    - Add it
+      ```bash
+      if [ -t 1 ]; then
+        exec zsh
+      fi
+      ```
+4. **Enjoy the trolling!** 🎉
 
 The theme will automatically create the necessary configuration files and language packs on first run.
 
