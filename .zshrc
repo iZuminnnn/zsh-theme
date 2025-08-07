@@ -29,7 +29,7 @@ alias update="update_zshrc"
 alias update-history="fc -R"  # Reload history from file
 
 # Version for update checking
-ZSHRC_VERSION="1.0.0"
+ZSHRC_VERSION="1.0.1"
 THEME_NAME="Zsh Troll Themer"
 troll_colors=(91 92 93 94 95 96) # red green yellow blue magenta cyan
 
@@ -463,7 +463,7 @@ preexec() {
 }
 
 precmd() {
-    PS1="%F{green}╭─$(time_icon)%f %F{red}%D{%H:%M:%S}%f%F{green}─%f %F{cyan}%n@%m %F{magenta}%~%f $(venv_info) $(git_info)
+    PS1="%F{green}╭─$(time_icon)%f %F{red}%D{%H:%M:%S}%f %F{green}─%f %F{cyan}%n@%m %F{magenta}%~%f $(venv_info) $(git_info)
 %F{green}╰─➜  %f"
     
     if [[ -n $timer ]]; then

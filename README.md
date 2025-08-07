@@ -120,6 +120,7 @@ zsh-theme/
 │   └── lang/               # Language packs directory
 │       ├── vi.txt          # Vietnamese messages (87 messages)
 │       └── en.txt          # English messages (87 messages)
+|-- font/                   # Font
 ├── version.txt             # Theme version
 ├── LICENSE                 # MIT License file
 └── README.md               # This documentation
