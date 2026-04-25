@@ -78,6 +78,7 @@ load_messages() {
 
     if [[ -f "$lang_file" ]]; then
         local -A key_counts
+        local store_key
         while IFS=':' read -r key value; do
             [[ "$key" =~ ^#.*$ || -z "$key" ]] && continue
             key="${key//\"/}"
@@ -85,7 +86,8 @@ load_messages() {
             value="${value# }"
             if [[ -n "${key_counts[$key]+x}" ]]; then
                 key_counts[$key]=$((key_counts[$key] + 1))
-                MESSAGES["${key}_${key_counts[$key]}"]="$value"
+                store_key="${key}_${key_counts[$key]}"
+                MESSAGES[$store_key]="$value"
             else
                 key_counts[$key]=0
                 MESSAGES[$key]="$value"
