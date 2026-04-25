@@ -1,4 +1,4 @@
-# English Language Pack for Zsh Troll Themer
+# English Language Pack for Zsh Buddy Theme
 # Format: category:message
 
 # Welcome message
@@ -7,7 +7,7 @@ tip_mode:💡 Tip: Use Alias 'serious' to enter the serious mode, or 'troll' to 
 
 # Update messages
 update_disabled:Update feature will be activated after repository rename.
-update_repo:New repository: https://github.com/hieudnm/troll-theme
+update_repo:New repository: https://github.com/hieudnm/zsh-buddy-theme
 
 # Time-based messages (17:30-18:30 - end of work day)
 overtime:It's getting late! Code less, go home before dinner gets cold!
