@@ -1,15 +1,15 @@
-# Zsh Troll Themer
+# Zsh Buddy Theme
 
-A dynamic, humorous Vietnamese developer-focused Zsh theme with multi-language support.
+Your coding buddy — a motivational Zsh theme with work-life balance reminders, multi-language support, and a touch of humor.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Zsh Version](https://img.shields.io/badge/Zsh-5.0%2B-brightgreen)](https://www.zsh.org/)
-[![Version](https://img.shields.io/badge/Version-1.0.1-orange)](https://github.com/hieudnm/zsh-troll-themer)
+[![Version](https://img.shields.io/badge/Version-1.0.1-orange)](https://github.com/hieudnm/zsh-buddy-theme)
 
 ## ✨ Features
 
 - 🌍 **Multi-language support** (Vietnamese, English) with easy extension system
-- 🕐 **Time-based troll messages** with special overtime reminders (17:30-18:30)
+- 🕐 **Time-based buddy messages** with special overtime reminders (17:30-18:30)
 - ⚡ **Command-specific responses** for Git, Docker, npm, Python, and 50+ commands
 - 🎨 **Dynamic prompt** with time icons, git status, virtual environment info
 - 📱 **System detection** (WSL, macOS, Windows, Linux)
@@ -21,13 +21,13 @@ A dynamic, humorous Vietnamese developer-focused Zsh theme with multi-language s
 **Note: you need download zsh first:** https://packages.msys2.org/packages/zsh
 1. **Create .zshrc:**
    ```bash
-   curl -s -o ~/.zshrc https://raw.githubusercontent.com/hieudnm/zsh-troll-themer/main/.zshrc && mkdir -p "$HOME/.troll_themer/lang"
+   curl -s -o ~/.zshrc https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.zshrc && mkdir -p "$HOME/.troll_themer/lang"
    ```
    ```bash
-   curl -s -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/hieudnm/zsh-troll-themer/main/.troll_themer/config
+   curl -s -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/config
    ```
    ```bash
-   touch "$HOME/.troll_themer/lang/vi.txt" && touch "$HOME/.troll_themer/lang/en.txt" && curl -s -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/hieudnm/zsh-troll-themer/main/.troll_themer/lang/vi.txt && curl -s -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/hieudnm/zsh-troll-themer/main/.troll_themer/lang/en.txt
+   touch "$HOME/.troll_themer/lang/vi.txt" && touch "$HOME/.troll_themer/lang/en.txt" && curl -s -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/vi.txt && curl -s -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/en.txt
    ```
 2. **Source the theme:**
    ```bash
@@ -112,7 +112,7 @@ Push thành công rồi, nghỉ xíu uống miếng nước người đẹp!
 ## 📁 Project Structure
 
 ```
-zsh-troll-themer/
+zsh-buddy-theme/
 ├── .zshrc                   # Main theme file
 ├── .troll_themer/           # Configuration & resources directory
 │   ├── config               # Language configuration file
@@ -148,7 +148,7 @@ Git, Docker, npm, yarn, Python, pip, system commands (ls, cd, mv, cp, rm), text 
 
 2. **Follow the format:**
    ```
-   # Your Language Pack for Zsh Troll Themer
+   # Your Language Pack for Zsh Buddy Theme
    # Format: category:message
 
    welcome:🎉 Welcome message in your language
@@ -165,16 +165,16 @@ Git, Docker, npm, yarn, Python, pip, system commands (ls, cd, mv, cp, rm), text 
 ## 🎨 Theme Preview
 
 ```bash
-🎉 Welcome to Zsh Troll Themer! Chúc người đẹp một ngày mới tràn đầy năng lượng nhé! Happy coding😘
-Repository mới: https://github.com/hieudnm/zsh-troll-themer
+🎉 Welcome to Zsh Buddy Theme! Chúc người đẹp một ngày mới tràn đầy năng lượng nhé! Happy coding😘
+Repository mới: https://github.com/hieudnm/zsh-buddy-theme
 🖥️  Windows (Git Bash)
 Cà phê sáng chưa? Hay vẫn đang nạp caffeine bằng stackoverflow?
 
-╭─🌞 user@machine ~/projects/zsh-troll-themer 🌿(main)
+╭─🌞 user@machine ~/projects/zsh-buddy-theme 🌿(main)
 ╰─➜ git commit -m "Add new feature"
 Commit xong rồi thì nhớ push người đẹp!                                   120ms
 
-╭─🌞 user@machine ~/projects/zsh-troll-themer 🌿(main)
+╭─🌞 user@machine ~/projects/zsh-buddy-theme 🌿(main)
 ╰─➜ 
 ```
 
@@ -283,8 +283,8 @@ Contributions are welcome! Here's how you can help:
 ### Development Setup
 
 ```bash
-git clone https://github.com/hieudnm/zsh-troll-themer.git
-cd zsh-troll-themer
+git clone https://github.com/hieudnm/zsh-buddy-theme.git
+cd zsh-buddy-theme
 # Test your changes
 source .zshrc
 ```
