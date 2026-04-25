@@ -1,6 +1,6 @@
-# Zsh Troll Themer - Version 1.0.0
+# Zsh Troll Themer - Version 1.0.1
 # A dynamic, humorous Vietnamese developer-focused Zsh theme
-# Repository: https://github.com/iZuminnnn/troll-theme
+# Repository: https://github.com/hieudnm/troll-theme
 
 if [[ "$PAGER" == "head -n 10000 | cat" || "$COMPOSER_NO_INTERACTION" == "1" ]]; then
   return
@@ -45,21 +45,6 @@ load_language_config() {
     local config_file="$HOME/.troll_themer/config"
     local lang="vi"  # default language
     
-    # Create default config file if it doesn't exist
-    if [[ ! -f "$config_file" ]]; then
-        cat > "$config_file" << 'EOF'
-# Configuration file for Zsh Troll Themer
-# Set your preferred language here
-
-# Available languages: vi (Vietnamese), en (English)
-# Default language if not set or file not found: vi
-TROLL_LANG="vi"
-
-# You can also set this via environment variable:
-# export TROLL_LANG="en"
-EOF
-    fi
-    
     # Check environment variable first
     if [[ -n "$TROLL_LANG" ]]; then
         lang="$TROLL_LANG"
@@ -85,33 +70,12 @@ load_messages() {
         lang_file="$HOME/.troll_themer/lang/vi.txt"
     fi
     
-    # Create default Vietnamese language file if it doesn't exist
     if [[ ! -f "$lang_file" ]]; then
-        cat > "$lang_file" << 'EOF'
-# Vietnamese Language Pack for Zsh Troll Themer
-# Format: category:message
-
-welcome:🎉 Chúc người đẹp một ngày mới tràn đầy năng lượng nhé! Happy coding😘
-tip_mode:💡 Tip: Sử dụng alias 'serious' để vào mode nghiêm túc, hoặc 'troll' để bật lại.
-
-overtime:Muộn rồi đó má! Code ít thôi, về đi kẻo người ta chờ cơm nguội bây giờ!
-overtime:Giờ này còn ngồi code chi nữa? Công ty có bao cổ phần đâu mà cống hiến dữ vậy!
-overtime:Về đi chứ! Bug thì fix hoài không hết, nhưng thanh xuân mà hết rồi là khỏi fix!
-
-hour_00:Giờ này còn thức làm gì đấy? Định hẹn hò với bug xuyên đêm à?
-hour_08:Cà phê sáng chưa? Hay vẫn đang nạp caffeine bằng stackoverflow?
-hour_12:Ăn trưa chưa? Hay lại định sống bằng niềm tin vào deadline?
-hour_18:Giờ này dev đang code hay đang nhậu?
-hour_22:Giờ này vẫn còn cày à? Tí nữa ngủ luôn trên bàn phím cho coi!
-hour_other:Giờ giấc kỳ lạ quá! Không biết gọi là sáng, trưa, chiều hay tối nữa!
-
-cmd_git_commit:Commit xong rồi thì nhớ push người đẹp!
-cmd_git_push:Push thành công rồi, nghỉ xíu uống miếng nước người đẹp!
-cmd_python:Python thần thánh, chạy thử coi output đẹp chưa người đẹp!
-cmd_ls:Danh sách file đây, cần gì cứ gọi anh người đẹp!
-EOF
+        echo -e "\e[91m⚠️  Language file not found: ${lang_file}\e[0m"
+        echo -e "\e[93mRun 'update' to download language files.\e[0m"
+        return
     fi
-    
+
     if [[ -f "$lang_file" ]]; then
         while IFS=':' read -r key value; do
             # Skip comments and empty lines
@@ -315,7 +279,7 @@ update_zshrc() {
     fi
     
     # Get remote version
-    local remote_version=$(curl -s https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/version.txt 2>/dev/null)
+    local remote_version=$(curl -s https://raw.githubusercontent.com/hieudnm/zsh-theme/main/version.txt 2>/dev/null)
     if [[ -z "$remote_version" ]]; then
         echo -e "\e[91mUnable to download version information.\e[0m"
         return 1
@@ -339,7 +303,7 @@ update_zshrc() {
         fi
         
         # Download new .zshrc version
-        if curl -s -o ~/.zshrc https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.zshrc; then
+        if curl -s -o ~/.zshrc https://raw.githubusercontent.com/hieudnm/zsh-theme/main/.zshrc; then
             echo -e "\e[92m✅ .zshrc updated successfully!\e[0m"
             
             # Download .troll_themer folder
@@ -353,17 +317,17 @@ update_zshrc() {
             
             # Download files with progress indication and error checking
             echo -e "\e[94m  ⬇️  Downloading config file...\e[0m"
-            if ! curl -s -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.troll_themer/config; then
+            if ! curl -s -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/hieudnm/zsh-theme/main/.troll_themer/config; then
                 echo -e "\e[91m❌ Failed to download config file\e[0m"
             fi
             
             echo -e "\e[94m  ⬇️  Downloading Vietnamese language pack...\e[0m"
-            if ! curl -s -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.troll_themer/lang/vi.txt; then
+            if ! curl -s -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/hieudnm/zsh-theme/main/.troll_themer/lang/vi.txt; then
                 echo -e "\e[91m❌ Failed to download Vietnamese language pack\e[0m"
             fi
             
             echo -e "\e[94m  ⬇️  Downloading English language pack...\e[0m"
-            if ! curl -s -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.troll_themer/lang/en.txt; then
+            if ! curl -s -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/hieudnm/zsh-theme/main/.troll_themer/lang/en.txt; then
                 echo -e "\e[91m❌ Failed to download English language pack\e[0m"
             fi
             
@@ -412,9 +376,9 @@ update_zshrc() {
                 mkdir -p "$HOME/.troll_themer/lang"
                 
                 # Download files
-                curl -s -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.troll_themer/config
-                curl -s -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.troll_themer/lang/vi.txt
-                curl -s -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.troll_themer/lang/en.txt
+                curl -s -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/hieudnm/zsh-theme/main/.troll_themer/config
+                curl -s -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/hieudnm/zsh-theme/main/.troll_themer/lang/vi.txt
+                curl -s -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/hieudnm/zsh-theme/main/.troll_themer/lang/en.txt
                 
                 echo -e "\e[92m✅ .troll_themer folder downloaded successfully!\e[0m"
                 echo -e "Run: source ~/.zshrc to reload configuration"
@@ -479,15 +443,11 @@ precmd() {
 # Custom clear function
 my_clear() {
     command clear
-    # Display welcome message and tips only if not in serious mode
-
     detect_wsl
-    # Only show troll message if not in serious mode
+    echo -e "\e[93m$(get_message welcome)\e[0m"
+    echo -e "\e[95m$(get_message tip_mode)\e[0m"
     if ! check_serious_mode; then
         troll_by_time true
-    else
-        echo -e "\e[93m$(get_message welcome)\e[0m"
-        echo -e "\e[95m$(get_message tip_mode)\e[0m"
     fi
 }
 
@@ -554,8 +514,7 @@ init_theme() {
     # Check for updates first
     update_zshrc
   else
-    # Display welcome message directly without using get_message to avoid circular dependency
-    echo -e "\e[93m🎉 Welcome to $THEME_NAME! Happy coding! 😘\e[0m"
+    echo -e "\e[93m$(get_message welcome)\e[0m"
     echo -e "\e[95m$(get_message tip_mode)\e[0m"
   fi
   

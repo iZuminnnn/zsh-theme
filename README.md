@@ -4,7 +4,7 @@ A dynamic, humorous Vietnamese developer-focused Zsh theme with multi-language s
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Zsh Version](https://img.shields.io/badge/Zsh-5.0%2B-brightgreen)](https://www.zsh.org/)
-[![Version](https://img.shields.io/badge/Version-1.0.0-orange)](https://github.com/iZuminnnn/troll-theme)
+[![Version](https://img.shields.io/badge/Version-1.0.0-orange)](https://github.com/hieudnm/troll-theme)
 
 ## ✨ Features
 
@@ -21,13 +21,13 @@ A dynamic, humorous Vietnamese developer-focused Zsh theme with multi-language s
 **Note: you need download zsh first:** https://packages.msys2.org/packages/zsh
 1. **Create .zshrc:**
    ```bash
-   curl -s -o ~/.zshrc https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.zshrc && mkdir -p "$HOME/.troll_themer/lang"
+   curl -s -o ~/.zshrc https://raw.githubusercontent.com/hieudnm/zsh-theme/main/.zshrc && mkdir -p "$HOME/.troll_themer/lang"
    ```
    ```bash
-   curl -s -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.troll_themer/config
+   curl -s -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/hieudnm/zsh-theme/main/.troll_themer/config
    ```
    ```bash
-   touch "$HOME/.troll_themer/lang/vi.txt" && touch "$HOME/.troll_themer/lang/en.txt" && curl -s -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.troll_themer/lang/vi.txt && curl -s -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/iZuminnnn/zsh-theme/main/.troll_themer/lang/en.txt
+   touch "$HOME/.troll_themer/lang/vi.txt" && touch "$HOME/.troll_themer/lang/en.txt" && curl -s -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/hieudnm/zsh-theme/main/.troll_themer/lang/vi.txt && curl -s -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/hieudnm/zsh-theme/main/.troll_themer/lang/en.txt
    ```
 2. **Source the theme:**
    ```bash
@@ -114,16 +114,16 @@ Push thành công rồi, nghỉ xíu uống miếng nước người đẹp!
 ```
 zsh-theme/
 ├── .zshrc                   # Main theme file
-├── .troll_themer/          # Auto-created configuration directory
-│   ├── config              # Language configuration file
-│   ├── update              # Update check timestamp
-│   └── lang/               # Language packs directory
-│       ├── vi.txt          # Vietnamese messages (87 messages)
-│       └── en.txt          # English messages (87 messages)
-|-- font/                   # Font
-├── version.txt             # Theme version
-├── LICENSE                 # MIT License file
-└── README.md               # This documentation
+├── .troll_themer/           # Configuration & resources directory
+│   ├── config               # Language configuration file
+│   ├── font/                # Included font
+│   │   └── CaskaydiaMonoNerdFontMono-SemiBold.ttf
+│   └── lang/                # Language packs directory
+│       ├── vi.txt           # Vietnamese messages
+│       └── en.txt           # English messages
+├── version.txt              # Theme version
+├── LICENSE                  # MIT License file
+└── README.md                # This documentation
 ```
 
 ## � Message Categories
@@ -132,7 +132,7 @@ zsh-theme/
 |----------|-------|-------------|
 | `welcome` | 1 | Welcome message on theme load |
 | `update_*` | 2 | Update and repository messages |
-| `overtime` | 3 | Work-life balance reminders (17:30-18:30) |
+| `overtime` | 30 | Work-life balance reminders (17:30-18:30) |
 | `hour_*` | 24 | Time-specific messages for each hour |
 | `cmd_*` | 57 | Command-specific responses |
 
@@ -166,7 +166,7 @@ Git, Docker, npm, yarn, Python, pip, system commands (ls, cd, mv, cp, rm), text 
 
 ```bash
 🎉 Welcome to Zsh Troll Themer! Chúc người đẹp một ngày mới tràn đầy năng lượng nhé! Happy coding😘
-Repository mới: https://github.com/iZuminnnn/troll-theme
+Repository mới: https://github.com/hieudnm/troll-theme
 🖥️  Windows (Git Bash)
 Cà phê sáng chưa? Hay vẫn đang nạp caffeine bằng stackoverflow?
 
@@ -283,7 +283,7 @@ Contributions are welcome! Here's how you can help:
 ### Development Setup
 
 ```bash
-git clone https://github.com/iZuminnnn/troll-theme.git
+git clone https://github.com/hieudnm/troll-theme.git
 cd troll-theme
 # Test your changes
 source .zshrc
@@ -301,6 +301,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Made with 💻 and ☕ by [iZuminnnn](https://github.com/iZuminnnn)**
+**Made with 💻 and ☕ by [hieudnm](https://github.com/hieudnm)**
 
 *"Code smarter, laugh harder!"* 😄
