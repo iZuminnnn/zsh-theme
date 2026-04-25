@@ -4,7 +4,7 @@ A dynamic, humorous Vietnamese developer-focused Zsh theme with multi-language s
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Zsh Version](https://img.shields.io/badge/Zsh-5.0%2B-brightgreen)](https://www.zsh.org/)
-[![Version](https://img.shields.io/badge/Version-1.0.0-orange)](https://github.com/hieudnm/troll-theme)
+[![Version](https://img.shields.io/badge/Version-1.0.1-orange)](https://github.com/hieudnm/zsh-troll-themer)
 
 ## ✨ Features
 
@@ -21,13 +21,13 @@ A dynamic, humorous Vietnamese developer-focused Zsh theme with multi-language s
 **Note: you need download zsh first:** https://packages.msys2.org/packages/zsh
 1. **Create .zshrc:**
    ```bash
-   curl -s -o ~/.zshrc https://raw.githubusercontent.com/hieudnm/zsh-theme/main/.zshrc && mkdir -p "$HOME/.troll_themer/lang"
+   curl -s -o ~/.zshrc https://raw.githubusercontent.com/hieudnm/zsh-troll-themer/main/.zshrc && mkdir -p "$HOME/.troll_themer/lang"
    ```
    ```bash
-   curl -s -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/hieudnm/zsh-theme/main/.troll_themer/config
+   curl -s -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/hieudnm/zsh-troll-themer/main/.troll_themer/config
    ```
    ```bash
-   touch "$HOME/.troll_themer/lang/vi.txt" && touch "$HOME/.troll_themer/lang/en.txt" && curl -s -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/hieudnm/zsh-theme/main/.troll_themer/lang/vi.txt && curl -s -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/hieudnm/zsh-theme/main/.troll_themer/lang/en.txt
+   touch "$HOME/.troll_themer/lang/vi.txt" && touch "$HOME/.troll_themer/lang/en.txt" && curl -s -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/hieudnm/zsh-troll-themer/main/.troll_themer/lang/vi.txt && curl -s -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/hieudnm/zsh-troll-themer/main/.troll_themer/lang/en.txt
    ```
 2. **Source the theme:**
    ```bash
@@ -112,7 +112,7 @@ Push thành công rồi, nghỉ xíu uống miếng nước người đẹp!
 ## 📁 Project Structure
 
 ```
-zsh-theme/
+zsh-troll-themer/
 ├── .zshrc                   # Main theme file
 ├── .troll_themer/           # Configuration & resources directory
 │   ├── config               # Language configuration file
@@ -166,15 +166,15 @@ Git, Docker, npm, yarn, Python, pip, system commands (ls, cd, mv, cp, rm), text 
 
 ```bash
 🎉 Welcome to Zsh Troll Themer! Chúc người đẹp một ngày mới tràn đầy năng lượng nhé! Happy coding😘
-Repository mới: https://github.com/hieudnm/troll-theme
+Repository mới: https://github.com/hieudnm/zsh-troll-themer
 🖥️  Windows (Git Bash)
 Cà phê sáng chưa? Hay vẫn đang nạp caffeine bằng stackoverflow?
 
-╭─🌞 user@machine ~/projects/zsh-theme 🌿(main)
+╭─🌞 user@machine ~/projects/zsh-troll-themer 🌿(main)
 ╰─➜ git commit -m "Add new feature"
 Commit xong rồi thì nhớ push người đẹp!                                   120ms
 
-╭─🌞 user@machine ~/projects/zsh-theme 🌿(main)
+╭─🌞 user@machine ~/projects/zsh-troll-themer 🌿(main)
 ╰─➜ 
 ```
 
@@ -283,8 +283,8 @@ Contributions are welcome! Here's how you can help:
 ### Development Setup
 
 ```bash
-git clone https://github.com/hieudnm/troll-theme.git
-cd troll-theme
+git clone https://github.com/hieudnm/zsh-troll-themer.git
+cd zsh-troll-themer
 # Test your changes
 source .zshrc
 ```
