@@ -114,16 +114,16 @@ Push thành công rồi, nghỉ xíu uống miếng nước người đẹp!
 ```
 zsh-theme/
 ├── .zshrc                   # Main theme file
-├── .troll_themer/          # Auto-created configuration directory
-│   ├── config              # Language configuration file
-│   ├── update              # Update check timestamp
-│   └── lang/               # Language packs directory
-│       ├── vi.txt          # Vietnamese messages (87 messages)
-│       └── en.txt          # English messages (87 messages)
-|-- font/                   # Font
-├── version.txt             # Theme version
-├── LICENSE                 # MIT License file
-└── README.md               # This documentation
+├── .troll_themer/           # Configuration & resources directory
+│   ├── config               # Language configuration file
+│   ├── font/                # Included font
+│   │   └── CaskaydiaMonoNerdFontMono-SemiBold.ttf
+│   └── lang/                # Language packs directory
+│       ├── vi.txt           # Vietnamese messages
+│       └── en.txt           # English messages
+├── version.txt              # Theme version
+├── LICENSE                  # MIT License file
+└── README.md                # This documentation
 ```
 
 ## � Message Categories
@@ -132,7 +132,7 @@ zsh-theme/
 |----------|-------|-------------|
 | `welcome` | 1 | Welcome message on theme load |
 | `update_*` | 2 | Update and repository messages |
-| `overtime` | 3 | Work-life balance reminders (17:30-18:30) |
+| `overtime` | 30 | Work-life balance reminders (17:30-18:30) |
 | `hour_*` | 24 | Time-specific messages for each hour |
 | `cmd_*` | 57 | Command-specific responses |
 

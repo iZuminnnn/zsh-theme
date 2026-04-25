@@ -1,4 +1,4 @@
-# Zsh Troll Themer - Version 1.0.0
+# Zsh Troll Themer - Version 1.0.1
 # A dynamic, humorous Vietnamese developer-focused Zsh theme
 # Repository: https://github.com/hieudnm/troll-theme
 
@@ -45,21 +45,6 @@ load_language_config() {
     local config_file="$HOME/.troll_themer/config"
     local lang="vi"  # default language
     
-    # Create default config file if it doesn't exist
-    if [[ ! -f "$config_file" ]]; then
-        cat > "$config_file" << 'EOF'
-# Configuration file for Zsh Troll Themer
-# Set your preferred language here
-
-# Available languages: vi (Vietnamese), en (English)
-# Default language if not set or file not found: vi
-TROLL_LANG="vi"
-
-# You can also set this via environment variable:
-# export TROLL_LANG="en"
-EOF
-    fi
-    
     # Check environment variable first
     if [[ -n "$TROLL_LANG" ]]; then
         lang="$TROLL_LANG"
@@ -85,67 +70,51 @@ load_messages() {
         lang_file="$HOME/.troll_themer/lang/vi.txt"
     fi
     
-    # Create default Vietnamese language file if it doesn't exist
     if [[ ! -f "$lang_file" ]]; then
-        cat > "$lang_file" << 'EOF'
-# Vietnamese Language Pack for Zsh Troll Themer
-# Format: category:message
-
-welcome:🎉 Chúc người đẹp một ngày mới tràn đầy năng lượng nhé! Happy coding😘
-tip_mode:💡 Tip: Sử dụng alias 'serious' để vào mode nghiêm túc, hoặc 'troll' để bật lại.
-
-overtime:Muộn rồi đó má! Code ít thôi, về đi kẻo người ta chờ cơm nguội bây giờ!
-overtime:Giờ này còn ngồi code chi nữa? Công ty có bao cổ phần đâu mà cống hiến dữ vậy!
-overtime:Về đi chứ! Bug thì fix hoài không hết, nhưng thanh xuân mà hết rồi là khỏi fix!
-
-hour_00:Giờ này còn thức làm gì đấy? Định hẹn hò với bug xuyên đêm à?
-hour_08:Cà phê sáng chưa? Hay vẫn đang nạp caffeine bằng stackoverflow?
-hour_12:Ăn trưa chưa? Hay lại định sống bằng niềm tin vào deadline?
-hour_18:Giờ này dev đang code hay đang nhậu?
-hour_22:Giờ này vẫn còn cày à? Tí nữa ngủ luôn trên bàn phím cho coi!
-hour_other:Giờ giấc kỳ lạ quá! Không biết gọi là sáng, trưa, chiều hay tối nữa!
-
-cmd_git_commit:Commit xong rồi thì nhớ push người đẹp!
-cmd_git_push:Push thành công rồi, nghỉ xíu uống miếng nước người đẹp!
-cmd_python:Python thần thánh, chạy thử coi output đẹp chưa người đẹp!
-cmd_ls:Danh sách file đây, cần gì cứ gọi anh người đẹp!
-EOF
+        echo -e "\e[91m⚠️  Language file not found: ${lang_file}\e[0m"
+        echo -e "\e[93mRun 'update' to download language files.\e[0m"
+        return
     fi
-    
+
     if [[ -f "$lang_file" ]]; then
+        local -A key_counts
+        local store_key
         while IFS=':' read -r key value; do
-            # Skip comments and empty lines
             [[ "$key" =~ ^#.*$ || -z "$key" ]] && continue
-            # Remove quotes from key and trim whitespace
             key="${key//\"/}"
             key="${key// /}"
             value="${value# }"
-            MESSAGES[$key]="$value"
+            if [[ -n "${key_counts[$key]+x}" ]]; then
+                key_counts[$key]=$((key_counts[$key] + 1))
+                store_key="${key}_${key_counts[$key]}"
+                MESSAGES[$store_key]="$value"
+            else
+                key_counts[$key]=0
+                MESSAGES[$key]="$value"
+            fi
         done < "$lang_file"
     fi
 }
 
-# Get message by key
+# Get message by key (returns first match for exact key)
 get_message() {
     local key="$1"
     local default_msg="${2:-}"
     echo "${MESSAGES[$key]:-$default_msg}"
 }
 
-# Get random message from category
+# Get random message from category (collects all entries with same prefix)
 get_random_message() {
     local category="$1"
     local messages=()
     local key
-    
-    # Collect all messages from the category
+
     for key in "${(@k)MESSAGES}"; do
-        if [[ "$key" == "$category" ]]; then
+        if [[ "$key" == "$category" || "$key" == "${category}_"* ]]; then
             messages+=("${MESSAGES[$key]}")
         fi
     done
-    
-    # Return random message
+
     if (( ${#messages[@]} > 0 )); then
         echo "${messages[$((RANDOM % ${#messages[@]} + 1))]}"
     fi
@@ -479,15 +448,11 @@ precmd() {
 # Custom clear function
 my_clear() {
     command clear
-    # Display welcome message and tips only if not in serious mode
-
     detect_wsl
-    # Only show troll message if not in serious mode
+    echo -e "\e[93m$(get_message welcome)\e[0m"
+    echo -e "\e[95m$(get_message tip_mode)\e[0m"
     if ! check_serious_mode; then
         troll_by_time true
-    else
-        echo -e "\e[93m$(get_message welcome)\e[0m"
-        echo -e "\e[95m$(get_message tip_mode)\e[0m"
     fi
 }
 
@@ -554,8 +519,7 @@ init_theme() {
     # Check for updates first
     update_zshrc
   else
-    # Display welcome message directly without using get_message to avoid circular dependency
-    echo -e "\e[93m🎉 Welcome to $THEME_NAME! Happy coding! 😘\e[0m"
+    echo -e "\e[93m$(get_message welcome)\e[0m"
     echo -e "\e[95m$(get_message tip_mode)\e[0m"
   fi
   

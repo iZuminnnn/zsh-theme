@@ -5,35 +5,78 @@
 welcome:🎉 Chúc người đẹp một ngày mới tràn đầy năng lượng nhé! Happy coding😘
 tip_mode:💡 Tip: Sử dụng alias 'serious' để vào mode nghiêm túc, hoặc 'troll' để bật lại.
 
-# Overtime messages
+# Update messages
+update_disabled:Tính năng cập nhật sẽ được kích hoạt sau khi đổi tên repository.
+update_repo:Repository mới: https://github.com/hieudnm/troll-theme
+
+# Overtime messages (17:30-18:30)
 overtime:Muộn rồi đó má! Code ít thôi, về đi kẻo người ta chờ cơm nguội bây giờ!
 overtime:Giờ này còn ngồi code chi nữa? Công ty có bao cổ phần đâu mà cống hiến dữ vậy!
 overtime:Về đi chứ! Bug thì fix hoài không hết, nhưng thanh xuân mà hết rồi là khỏi fix!
+overtime:Bắt đầu shutdown đi, đừng để hôm nay trở thành một ngày OT vô nghĩa!
+overtime:Deadline quan trọng, nhưng người chờ cơm còn quan trọng hơn!
+overtime:Tắt máy đi! Về nhà hôn người yêu, ôm con, ăn cơm! Đừng về nhà chỉ có... con mèo!
+overtime:Ngồi thêm tí nữa là công ty in tên lên bàn phím luôn đó, về đi!
+overtime:Vẫn còn ngồi à? Đi nhanh lên, đừng để mai công ty tặng gối mền cho tiện!
+overtime:Gõ phím hoài không chán à? Về đi, bàn phím thay được chứ thanh xuân mòn rồi khỏi fix!
+overtime:Về đi! Đừng để hôm nay thành ngày OT vô nghĩa cùng mức lương!
+overtime:Code thêm tí nữa mai HR gửi hợp đồng thuê công ty làm nhà ở luôn!
+overtime:Máy tính không cần nghỉ ngơi, nhưng bạn thì cần! Shutdown ngay!
+overtime:Bug không bao giờ hết, nhưng deadline cuộc đời thì đến nhanh lắm, về đi!
+overtime:Ngồi thêm tí nữa là công ty khắc tên lên ghế luôn đó, về đi!
+overtime:Về đi! Công ty có cổ phần đâu mà hy sinh dữ vậy!
+overtime:Gõ ít thôi, dành năng lượng nắm tay người thương!
+overtime:Đi nhanh lên! Đừng về nhà chỉ có... con mèo nhìn bằng đôi mắt thương hại!
+overtime:Gõ thêm là bàn phím kiện lên công đoàn đó!
+overtime:Về đi! Đừng để đồng nghiệp mai tưởng mình là bảo vệ ca đêm!
+overtime:OT không giúp giàu đâu, nhưng chắc chắn giúp già!
+overtime:Máy tính upgrade được, nhưng cột sống gãy rồi là hết!
+overtime:Code chưa xong à? Mai làm tiếp, thức khuya mất ngủ mai khỏi code!
+overtime:Sếp không thấy OT của bạn đâu, nhưng bác sĩ thần kinh sẽ sớm thấy!
+overtime:Về đi! Hay định debug cả cuộc đời?
+overtime:Bug chờ được, nhưng người yêu thì không!
+overtime:Đi nhanh! Đừng đi làm mai với đôi mắt đen hơn dark mode!
+overtime:Công ty không đóng cửa, nhưng quán ăn yêu thích sắp đóng rồi!
+overtime:Fix bug xong chưa? Chưa à? Mai fix, về muộn nữa chỉ có bug làm bạn thôi!
+overtime:Ngồi thêm tí nữa mai HR tặng huy chương 'nhân viên bền bỉ'!
+overtime:Deadline gấp cũng không nhanh bằng thanh xuân trôi qua, về đi khi còn có thể!
 
 # Hourly messages
 hour_00:Giờ này còn thức làm gì đấy? Định hẹn hò với bug xuyên đêm à?
+hour_00:Ngủ sớm đi, code khuya hay commit mấy dòng hối hận lắm!
 hour_01:Đêm khuya rồi, nghỉ ngơi đi! Code mãi cũng không ra được bug-free đâu!
 hour_02:2 giờ sáng rồi mà còn code? Chắc là đang debug cái gì khó quá nhỉ?
+hour_02:Giờ này còn code chứng tỏ trình khá cao đấy!
 hour_03:3 giờ sáng! Chưa ngủ à? Tí nữa có ma code xuất hiện đấy!
 hour_04:4 giờ sáng rồi! Ngủ đi, mai còn phải fix bug tiếp!
+hour_04:Gà sắp gáy mà bug vẫn chưa chịu đi ngủ?
 hour_05:5 giờ sáng! Sắp sáng rồi, ngủ tý đi rồi dậy làm tiếp!
 hour_06:Sáng sớm thế này mà đã code à? Chăm chỉ quá!
+hour_06:Sáng rồi, mở VS Code hay mở nồi cơm trước?
 hour_07:7 giờ sáng! Bắt đầu ngày mới với tinh thần tươi tắn nào!
 hour_08:Cà phê sáng chưa? Hay vẫn đang nạp caffeine bằng stackoverflow?
+hour_08:Sáng nay ăn gì chưa? Đừng nói lại là 'fix bug' nhé!
 hour_09:9 giờ sáng! Standup meeting rồi, có gì mới để share không?
 hour_10:10 giờ sáng! Đang sprint hay đang stuck với bug nào đó?
+hour_10:Chắc vẫn đang họp đúng không? Nhớ 'nói ít, code nhiều'!
 hour_11:11 giờ sáng! Sắp tới giờ ăn trưa rồi, code xong task này đi!
 hour_12:Ăn trưa chưa? Hay lại định sống bằng niềm tin vào deadline?
+hour_12:Bug có nghỉ trưa không? Không! Nên dev cũng không!
 hour_13:Ăn trưa xong rồi, năng lượng đầy đủ để chiến tiếp!
 hour_14:2 giờ chiều! Buồn ngủ chưa? Uống thêm cà phê đi!
+hour_14:Giờ này dễ ngủ gật lắm, nhưng code ngủ gật nhanh hơn dev!
 hour_15:3 giờ chiều! Review code hay viết test case gì đó đi!
 hour_16:4 giờ chiều! Sắp về rồi, wrap-up công việc thôi!
+hour_16:Code chiều hay có bug, cẩn thận không mai fix không kịp!
 hour_17:5 giờ chiều! Giờ tan ca đây, commit code và về thôi!
 hour_18:Giờ này dev đang code hay đang nhậu?
+hour_18:Cẩn thận, code buổi tối hay commit mấy dòng hối hận lắm!
 hour_19:7 giờ tối! Đang overtime hay đang làm side project?
 hour_20:8 giờ tối! Vẫn còn code à? Work-life balance đâu rồi?
+hour_20:Định chơi game giảm stress hay ôm bug cả tối?
 hour_21:9 giờ tối! Nghỉ ngơi đi, ngày mai còn dài!
 hour_22:Giờ này vẫn còn cày à? Tí nữa ngủ luôn trên bàn phím cho coi!
+hour_22:Dev kiểu này mai dậy thành zombie cho coi!
 hour_23:11 giờ đêm! Sắp sang ngày mới rồi, ngủ đi!
 hour_other:Giờ giấc kỳ lạ quá! Không biết gọi là sáng, trưa, chiều hay tối nữa!
 
