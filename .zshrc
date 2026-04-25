@@ -77,39 +77,42 @@ load_messages() {
     fi
 
     if [[ -f "$lang_file" ]]; then
+        local -A key_counts
         while IFS=':' read -r key value; do
-            # Skip comments and empty lines
             [[ "$key" =~ ^#.*$ || -z "$key" ]] && continue
-            # Remove quotes from key and trim whitespace
             key="${key//\"/}"
             key="${key// /}"
             value="${value# }"
-            MESSAGES[$key]="$value"
+            if [[ -n "${key_counts[$key]+x}" ]]; then
+                key_counts[$key]=$((key_counts[$key] + 1))
+                MESSAGES["${key}_${key_counts[$key]}"]="$value"
+            else
+                key_counts[$key]=0
+                MESSAGES[$key]="$value"
+            fi
         done < "$lang_file"
     fi
 }
 
-# Get message by key
+# Get message by key (returns first match for exact key)
 get_message() {
     local key="$1"
     local default_msg="${2:-}"
     echo "${MESSAGES[$key]:-$default_msg}"
 }
 
-# Get random message from category
+# Get random message from category (collects all entries with same prefix)
 get_random_message() {
     local category="$1"
     local messages=()
     local key
-    
-    # Collect all messages from the category
+
     for key in "${(@k)MESSAGES}"; do
-        if [[ "$key" == "$category" ]]; then
+        if [[ "$key" == "$category" || "$key" == "${category}_"* ]]; then
             messages+=("${MESSAGES[$key]}")
         fi
     done
-    
-    # Return random message
+
     if (( ${#messages[@]} > 0 )); then
         echo "${messages[$((RANDOM % ${#messages[@]} + 1))]}"
     fi
