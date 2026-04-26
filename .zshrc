@@ -375,7 +375,7 @@ update_zshrc() {
         rm -rf "$tmp_dir"
         
         echo -e "\e[92m🎉 Update completed successfully!\e[0m"
-        echo -e "\e[93m📦 Backups saved at ~/.zshrc.backup$([[ -d \"$HOME/.troll_themer.backup\" ]] && echo \" and ~/.troll_themer.backup\")\e[0m"
+        echo -e "\e[93m📦 Backups saved at ~/.zshrc.backup$([[ -d "$HOME/.troll_themer.backup" ]] && echo " and ~/.troll_themer.backup")\e[0m"
         echo -e "Restart Shell to apply changes, or run: source ~/.zshrc"
     else
         echo -e "\e[92m✅ You are already using the latest version ($ZSHRC_VERSION)\e[0m"
