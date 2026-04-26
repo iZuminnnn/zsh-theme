@@ -367,15 +367,15 @@ update_zshrc() {
 
         # Restore user's language setting if it was customized
         if [[ -n "$user_lang" ]]; then
-            sed -i "s/^TROLL_LANG=\".*\"/TROLL_LANG=\"$user_lang\"/" "$HOME/.troll_themer/config"
+            local tmp_cfg=$(mktemp)
+            sed "s/^TROLL_LANG=\".*\"/TROLL_LANG=\"$user_lang\"/" "$HOME/.troll_themer/config" > "$tmp_cfg" && mv "$tmp_cfg" "$HOME/.troll_themer/config"
         fi
 
-        # Cleanup
+        # Cleanup temp dir
         rm -rf "$tmp_dir"
-        rm -f ~/.zshrc.backup
-        rm -rf "$HOME/.troll_themer.backup"
         
         echo -e "\e[92m🎉 Update completed successfully!\e[0m"
+        echo -e "\e[93m📦 Backups saved at ~/.zshrc.backup$([[ -d \"$HOME/.troll_themer.backup\" ]] && echo \" and ~/.troll_themer.backup\")\e[0m"
         echo -e "Restart Shell to apply changes, or run: source ~/.zshrc"
     else
         echo -e "\e[92m✅ You are already using the latest version ($ZSHRC_VERSION)\e[0m"
