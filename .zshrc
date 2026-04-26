@@ -313,9 +313,26 @@ update_zshrc() {
             echo -e "\e[94m📁 .troll_themer folder not found - will create new one\e[0m"
         fi
         
-        # Download new .zshrc version
-        if curl -sf -o ~/.zshrc https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.zshrc; then
-            echo -e "\e[92m✅ .zshrc updated successfully!\e[0m"
+        # Extract user's custom config (everything after ZSH_BUDDY_THEME_END marker)
+        local user_config=""
+        if grep -q "ZSH_BUDDY_THEME_END" ~/.zshrc; then
+            user_config=$(sed -n '/^# === ZSH_BUDDY_THEME_END ===/,$ p' ~/.zshrc | tail -n +2)
+        fi
+
+        # Download new .zshrc version to temp file first
+        local tmp_zshrc=$(mktemp)
+        if curl -sf -o "$tmp_zshrc" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.zshrc; then
+            # Write new theme code
+            cp "$tmp_zshrc" ~/.zshrc
+            rm -f "$tmp_zshrc"
+
+            # Append user's custom config if it existed
+            if [[ -n "$user_config" ]]; then
+                echo "$user_config" >> ~/.zshrc
+                echo -e "\e[92m✅ .zshrc updated successfully! Your custom config has been preserved.\e[0m"
+            else
+                echo -e "\e[92m✅ .zshrc updated successfully!\e[0m"
+            fi
             
             # Download .troll_themer folder
             echo -e "\e[96m📥 Downloading .troll_themer configuration...\e[0m"
@@ -358,6 +375,7 @@ update_zshrc() {
             fi
             echo -e "Restart Shell to apply changes, or run: source ~/.zshrc"
         else
+            rm -f "$tmp_zshrc"
             echo -e "\e[91m❌ Failed to download .zshrc file. Rolling back...\e[0m"
             # Restore .zshrc backup
             cp ~/.zshrc.backup ~/.zshrc
@@ -536,3 +554,7 @@ init_theme() {
 
 # Call initialization only if this is an interactive shell
 [[ $- == *i* ]] && init_theme
+
+# === ZSH_BUDDY_THEME_END ===
+# Everything below this line is preserved during theme updates.
+# Add your custom PATH, aliases, exports, and other config here.

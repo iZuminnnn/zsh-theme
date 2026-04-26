@@ -180,6 +180,22 @@ Commit xong rồi thì nhớ push người đẹp!                              
 
 ## ⚙️ Configuration Options
 
+### Custom User Config (Preserved During Updates)
+
+Add your custom PATH, aliases, exports, and other config **at the end** of `.zshrc`, after the `ZSH_BUDDY_THEME_END` marker:
+
+```bash
+# === ZSH_BUDDY_THEME_END ===
+# Everything below this line is preserved during theme updates.
+# Add your custom PATH, aliases, exports, and other config here.
+
+export PATH="/usr/local/bin:$PATH"
+alias ll="ls -la"
+export MY_API_KEY="..."
+```
+
+When you run `update`, the theme code above the marker is replaced with the new version, but everything below it is **automatically preserved**.
+
 ### Environment Variables
 
 - `TROLL_LANG` - Set preferred language (vi, en, or custom)
