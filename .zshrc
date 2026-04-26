@@ -316,7 +316,7 @@ update_zshrc() {
         # Extract user's custom config (everything after ZSH_BUDDY_THEME_END marker)
         local user_config=""
         if grep -q "ZSH_BUDDY_THEME_END" ~/.zshrc; then
-            user_config=$(sed -n '/^# === ZSH_BUDDY_THEME_END ===/,$ p' ~/.zshrc | tail -n +2)
+            user_config=$(sed -n '/^# === ZSH_BUDDY_THEME_END ===/,$ p' ~/.zshrc | tail -n +2 | sed '/^# Everything below this line/d; /^# Add your custom PATH/d')
         fi
 
         # Download new .zshrc version to temp file first
@@ -328,7 +328,7 @@ update_zshrc() {
 
             # Append user's custom config if it existed
             if [[ -n "$user_config" ]]; then
-                echo "$user_config" >> ~/.zshrc
+                printf '%s\n' "$user_config" >> ~/.zshrc
                 echo -e "\e[92m✅ .zshrc updated successfully! Your custom config has been preserved.\e[0m"
             else
                 echo -e "\e[92m✅ .zshrc updated successfully!\e[0m"
