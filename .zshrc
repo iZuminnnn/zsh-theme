@@ -257,24 +257,23 @@ time_icon() {
 
 
 check_internet() {
-    local ping_cmd
-    case "$OSTYPE" in
-        darwin*|linux-gnu*)
-            # macOS or Linux
-            ping -c 1 github.com >/dev/null 2>&1
-            ;;
-        msys*|cygwin*)
-            # Windows
-            ping -n 1 github.com >/dev/null 2>&1
-            ;;
-        *)
-            # For other systems, try curl
-            curl --connect-timeout 2 -s https://github.com >/dev/null 2>&1
-            ;;
-    esac
-    return $?
+    curl --connect-timeout 3 -sf https://raw.githubusercontent.com >/dev/null 2>&1
 }
 
+# Compare semver versions. Returns 0 if $1 > $2
+version_gt() {
+    local v1=(${(s:.:)1})
+    local v2=(${(s:.:)2})
+    local i
+    for i in 1 2 3; do
+        if (( ${v1[$i]:-0} > ${v2[$i]:-0} )); then
+            return 0
+        elif (( ${v1[$i]:-0} < ${v2[$i]:-0} )); then
+            return 1
+        fi
+    done
+    return 1
+}
 
 # Function to check for and download zshrc updates
 update_zshrc() {
@@ -284,7 +283,7 @@ update_zshrc() {
     fi
     
     # Get remote version
-    local remote_version=$(curl -sf https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/version.txt 2>/dev/null)
+    local remote_version=$(curl -sf --connect-timeout 5 https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/version.txt 2>/dev/null)
     if [[ -z "$remote_version" ]]; then
         echo -e "\e[91mUnable to download version information.\e[0m"
         return 1
@@ -296,16 +295,15 @@ update_zshrc() {
         return 1
     fi
     
-    # Compare versions (simple string comparison)
-    if [[ "$remote_version" != "$ZSHRC_VERSION" ]]; then
-        echo -e "\e[92mNew version has been discovered: $remote_version (Present: $ZSHRC_VERSION)\e[0m"
-        echo -e "Download update ..."
+    # Compare versions using semver (only update if remote > local)
+    if version_gt "$remote_version" "$ZSHRC_VERSION"; then
+        echo -e "\e[92mNew version available: $remote_version (Current: $ZSHRC_VERSION)\e[0m"
+        echo -e "Downloading update..."
         
         # Backup current files
         cp ~/.zshrc ~/.zshrc.backup
         echo -e "\e[93m📦 Backed up .zshrc to ~/.zshrc.backup\e[0m"
         
-        # Backup .troll_themer folder if it exists
         if [[ -d "$HOME/.troll_themer" ]]; then
             cp -r "$HOME/.troll_themer" "$HOME/.troll_themer.backup"
             echo -e "\e[93m📦 Backed up .troll_themer to ~/.troll_themer.backup\e[0m"
@@ -319,78 +317,66 @@ update_zshrc() {
             user_config=$(sed -n '/^# === ZSH_BUDDY_THEME_END ===/,$ p' ~/.zshrc | tail -n +2 | sed '/^# Everything below this line/d; /^# Add your custom PATH/d')
         fi
 
-        # Download new .zshrc version to temp file first
-        local tmp_zshrc=$(mktemp)
-        if curl -sf -o "$tmp_zshrc" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.zshrc; then
-            # Write new theme code
-            cp "$tmp_zshrc" ~/.zshrc
-            rm -f "$tmp_zshrc"
+        # Preserve user's language setting
+        local user_lang=""
+        if [[ -f "$HOME/.troll_themer/config" ]]; then
+            user_lang=$(grep '^TROLL_LANG=' "$HOME/.troll_themer/config" | tail -1 | cut -d'"' -f2)
+        fi
 
-            # Append user's custom config if it existed
-            if [[ -n "$user_config" ]]; then
-                printf '%s\n' "$user_config" >> ~/.zshrc
-                echo -e "\e[92m✅ .zshrc updated successfully! Your custom config has been preserved.\e[0m"
-            else
-                echo -e "\e[92m✅ .zshrc updated successfully!\e[0m"
-            fi
-            
-            # Download .troll_themer folder
-            echo -e "\e[96m📥 Downloading .troll_themer configuration...\e[0m"
-            
-            # Create directory structure with error checking
-            if ! mkdir -p "$HOME/.troll_themer/lang"; then
-                echo -e "\e[91m❌ Failed to create .troll_themer directories\e[0m"
-                return 1
-            fi
-            
-            # Download files with progress indication and error checking
-            echo -e "\e[94m  ⬇️  Downloading config file...\e[0m"
-            if ! curl -sf -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/config; then
-                echo -e "\e[91m❌ Failed to download config file\e[0m"
-            fi
-            
-            echo -e "\e[94m  ⬇️  Downloading Vietnamese language pack...\e[0m"
-            if ! curl -sf -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/vi.txt; then
-                echo -e "\e[91m❌ Failed to download Vietnamese language pack\e[0m"
-            fi
-            
-            echo -e "\e[94m  ⬇️  Downloading English language pack...\e[0m"
-            if ! curl -sf -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/en.txt; then
-                echo -e "\e[91m❌ Failed to download English language pack\e[0m"
-            fi
-            
-            # Verify downloaded files
-            echo -e "\e[95m🔍 Verifying downloaded files...\e[0m"
-            local success=true
-            [[ ! -f "$HOME/.troll_themer/config" ]] && echo -e "\e[91m❌ Config file missing\e[0m" && success=false
-            [[ ! -f "$HOME/.troll_themer/lang/vi.txt" ]] && echo -e "\e[91m❌ Vietnamese language pack missing\e[0m" && success=false
-            [[ ! -f "$HOME/.troll_themer/lang/en.txt" ]] && echo -e "\e[91m❌ English language pack missing\e[0m" && success=false
-            
-            if [[ "$success" == true ]]; then
-                echo -e "\e[92m✅ All files downloaded successfully!\e[0m"
-                echo -e "\e[92m🎉 Update completed! Backups saved at ~/.zshrc.backup$([ -d "$HOME/.troll_themer.backup" ] && echo " and ~/.troll_themer.backup")\e[0m"
-            else
-                echo -e "\e[93m⚠️  Update partially completed - some files may be missing\e[0m"
-                echo -e "\e[92m🎉 Update completed with warnings! Backups saved at ~/.zshrc.backup$([ -d "$HOME/.troll_themer.backup" ] && echo " and ~/.troll_themer.backup")\e[0m"
-            fi
-            echo -e "Restart Shell to apply changes, or run: source ~/.zshrc"
-        else
-            rm -f "$tmp_zshrc"
-            echo -e "\e[91m❌ Failed to download .zshrc file. Rolling back...\e[0m"
-            # Restore .zshrc backup
+        # Download ALL files to temp dir first (atomic)
+        local tmp_dir=$(mktemp -d)
+        local download_ok=true
+        
+        echo -e "\e[96m📥 Downloading update files...\e[0m"
+        
+        curl -sf -o "$tmp_dir/zshrc" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.zshrc || download_ok=false
+        curl -sf -o "$tmp_dir/config" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/config || download_ok=false
+        curl -sf -o "$tmp_dir/vi.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/vi.txt || download_ok=false
+        curl -sf -o "$tmp_dir/en.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/en.txt || download_ok=false
+
+        if [[ "$download_ok" == false ]]; then
+            rm -rf "$tmp_dir"
+            echo -e "\e[91m❌ Failed to download update files. Rolling back...\e[0m"
             cp ~/.zshrc.backup ~/.zshrc
             echo -e "\e[93m🔄 Restored .zshrc from backup\e[0m"
-            
-            # Restore .troll_themer backup if it exists
             if [[ -d "$HOME/.troll_themer.backup" ]]; then
                 rm -rf "$HOME/.troll_themer"
                 mv "$HOME/.troll_themer.backup" "$HOME/.troll_themer"
                 echo -e "\e[93m🔄 Restored .troll_themer from backup\e[0m"
             fi
-            
             echo -e "\e[91m❌ Update failed. All files have been restored to previous state.\e[0m"
             return 1
         fi
+
+        # All files downloaded — apply update
+        cp "$tmp_dir/zshrc" ~/.zshrc
+
+        # Append user's custom config if it existed
+        if [[ -n "$user_config" ]]; then
+            printf '%s\n' "$user_config" >> ~/.zshrc
+            echo -e "\e[92m✅ .zshrc updated! Your custom config has been preserved.\e[0m"
+        else
+            echo -e "\e[92m✅ .zshrc updated successfully!\e[0m"
+        fi
+
+        # Apply .troll_themer files
+        mkdir -p "$HOME/.troll_themer/lang"
+        cp "$tmp_dir/config" "$HOME/.troll_themer/config"
+        cp "$tmp_dir/vi.txt" "$HOME/.troll_themer/lang/vi.txt"
+        cp "$tmp_dir/en.txt" "$HOME/.troll_themer/lang/en.txt"
+
+        # Restore user's language setting if it was customized
+        if [[ -n "$user_lang" ]]; then
+            sed -i "s/^TROLL_LANG=\".*\"/TROLL_LANG=\"$user_lang\"/" "$HOME/.troll_themer/config"
+        fi
+
+        # Cleanup
+        rm -rf "$tmp_dir"
+        rm -f ~/.zshrc.backup
+        rm -rf "$HOME/.troll_themer.backup"
+        
+        echo -e "\e[92m🎉 Update completed successfully!\e[0m"
+        echo -e "Restart Shell to apply changes, or run: source ~/.zshrc"
     else
         echo -e "\e[92m✅ You are already using the latest version ($ZSHRC_VERSION)\e[0m"
         
@@ -400,15 +386,10 @@ update_zshrc() {
             read -r response
             if [[ "$response" =~ ^[Yy]$ ]]; then
                 echo -e "\e[96m📥 Downloading .troll_themer configuration...\e[0m"
-                
-                # Create directory structure
                 mkdir -p "$HOME/.troll_themer/lang"
-                
-                # Download files
                 curl -sf -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/config
                 curl -sf -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/vi.txt
                 curl -sf -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/en.txt
-                
                 echo -e "\e[92m✅ .troll_themer folder downloaded successfully!\e[0m"
                 echo -e "Run: source ~/.zshrc to reload configuration"
             fi
