@@ -21,13 +21,13 @@ Your coding buddy — a motivational Zsh theme with work-life balance reminders,
 **Note: you need download zsh first:** https://packages.msys2.org/packages/zsh
 1. **Create .zshrc:**
    ```bash
-   curl -s -o ~/.zshrc https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.zshrc && mkdir -p "$HOME/.troll_themer/lang"
+   curl -sf -o ~/.zshrc https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.zshrc && mkdir -p "$HOME/.troll_themer/lang"
    ```
    ```bash
-   curl -s -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/config
+   curl -sf -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/config
    ```
    ```bash
-   touch "$HOME/.troll_themer/lang/vi.txt" && touch "$HOME/.troll_themer/lang/en.txt" && curl -s -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/vi.txt && curl -s -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/en.txt
+   touch "$HOME/.troll_themer/lang/vi.txt" && touch "$HOME/.troll_themer/lang/en.txt" && curl -sf -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/vi.txt && curl -sf -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/en.txt
    ```
 2. **Source the theme:**
    ```bash

@@ -284,9 +284,15 @@ update_zshrc() {
     fi
     
     # Get remote version
-    local remote_version=$(curl -s https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/version.txt 2>/dev/null)
+    local remote_version=$(curl -sf https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/version.txt 2>/dev/null)
     if [[ -z "$remote_version" ]]; then
         echo -e "\e[91mUnable to download version information.\e[0m"
+        return 1
+    fi
+
+    # Validate version format (e.g. 1.0.0, 2.1.3)
+    if [[ ! "$remote_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        echo -e "\e[91mInvalid version format received: $remote_version\e[0m"
         return 1
     fi
     
@@ -308,7 +314,7 @@ update_zshrc() {
         fi
         
         # Download new .zshrc version
-        if curl -s -o ~/.zshrc https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.zshrc; then
+        if curl -sf -o ~/.zshrc https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.zshrc; then
             echo -e "\e[92m✅ .zshrc updated successfully!\e[0m"
             
             # Download .troll_themer folder
@@ -322,17 +328,17 @@ update_zshrc() {
             
             # Download files with progress indication and error checking
             echo -e "\e[94m  ⬇️  Downloading config file...\e[0m"
-            if ! curl -s -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/config; then
+            if ! curl -sf -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/config; then
                 echo -e "\e[91m❌ Failed to download config file\e[0m"
             fi
             
             echo -e "\e[94m  ⬇️  Downloading Vietnamese language pack...\e[0m"
-            if ! curl -s -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/vi.txt; then
+            if ! curl -sf -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/vi.txt; then
                 echo -e "\e[91m❌ Failed to download Vietnamese language pack\e[0m"
             fi
             
             echo -e "\e[94m  ⬇️  Downloading English language pack...\e[0m"
-            if ! curl -s -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/en.txt; then
+            if ! curl -sf -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/en.txt; then
                 echo -e "\e[91m❌ Failed to download English language pack\e[0m"
             fi
             
@@ -381,9 +387,9 @@ update_zshrc() {
                 mkdir -p "$HOME/.troll_themer/lang"
                 
                 # Download files
-                curl -s -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/config
-                curl -s -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/vi.txt
-                curl -s -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/en.txt
+                curl -sf -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/config
+                curl -sf -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/vi.txt
+                curl -sf -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/en.txt
                 
                 echo -e "\e[92m✅ .troll_themer folder downloaded successfully!\e[0m"
                 echo -e "Run: source ~/.zshrc to reload configuration"
