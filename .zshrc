@@ -33,6 +33,20 @@ ZSHRC_VERSION="1.0.1"
 THEME_NAME="Zsh Buddy Theme"
 troll_colors=(91 92 93 94 95 96) # red green yellow blue magenta cyan
 
+# Detect nanosecond support (GNU date has %N, macOS BSD date does not)
+_zbt_has_nanoseconds=false
+if [[ "$(date +%N 2>/dev/null)" != "%N" && "$(date +%N 2>/dev/null)" != "N" ]]; then
+    _zbt_has_nanoseconds=true
+fi
+
+_zbt_timer_now() {
+    if [[ "$_zbt_has_nanoseconds" == true ]]; then
+        echo $(( $(date +%s%0N) / 1000000 ))
+    else
+        echo $(( $(date +%s) * 1000 ))
+    fi
+}
+
 # Language system
 typeset -A MESSAGES  # Associative array to store messages
 
@@ -415,7 +429,7 @@ alias mode-status="[[ -n \$TROLL_MODE ]] && echo -e '\e[93mCurrent mode: \$TROLL
 # Prompt hooks
 
 preexec() {
-    timer=$(( $(date +%s%0N) / 1000000 ))
+    timer=$(_zbt_timer_now)
     last_cmd="$1"
 
     # Skip trolling if in serious mode
@@ -441,7 +455,7 @@ precmd() {
 %F{green}╰─➜  %f"
     
     if [[ -n $timer ]]; then
-        local now=$(( $(date +%s%0N) / 1000000 ))
+        local now=$(_zbt_timer_now)
         RPROMPT="%F{cyan}[$((now-timer))ms]%f"
         unset timer
     fi
