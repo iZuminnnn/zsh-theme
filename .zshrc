@@ -445,13 +445,24 @@ uninstall_zsh_buddy() {
 
     echo -e "\e[96m🔄 Uninstalling Zsh Buddy Theme...\e[0m"
 
-    # Restore .zshrc from backup if available
+    # Restore .zshrc from backup or extract user config
     if [[ -f "$HOME/.zshrc.backup" ]]; then
         cp "$HOME/.zshrc.backup" "$HOME/.zshrc"
         echo -e "\e[92m✅ Restored .zshrc from backup\e[0m"
+    elif grep -q "ZSH_BUDDY_THEME_END" "$HOME/.zshrc" 2>/dev/null; then
+        # No backup — extract user config after theme marker
+        local user_config
+        user_config=$(sed -n '/^# === ZSH_BUDDY_THEME_END ===/,$ p' "$HOME/.zshrc" | tail -n +2 | sed '/^# Everything below this line/d; /^# Add your custom PATH/d')
+        if [[ -n "$user_config" ]]; then
+            printf '%s\n' "$user_config" > "$HOME/.zshrc"
+            echo -e "\e[92m✅ Restored your custom config (PATH, aliases, exports)\e[0m"
+        else
+            rm -f "$HOME/.zshrc"
+            echo -e "\e[93m⚠️  No custom config found — removed .zshrc\e[0m"
+        fi
     else
         rm -f "$HOME/.zshrc"
-        echo -e "\e[93m⚠️  No .zshrc backup found — removed .zshrc\e[0m"
+        echo -e "\e[93m⚠️  No backup or theme marker found — removed .zshrc\e[0m"
     fi
 
     # Remove theme data

@@ -123,6 +123,27 @@ $ git push
 Push thành công rồi, nghỉ xíu uống miếng nước người đẹp!
 ```
 
+## 🗑️ Uninstall
+
+```bash
+uninstall
+```
+
+The uninstaller will:
+- Restore your previous `.zshrc` from backup (if available)
+- If no backup exists, extract and keep your custom config (PATH, aliases, exports added after `ZSH_BUDDY_THEME_END`)
+- Remove `~/.troll_themer/` and all backups
+- Remove `zsh-autosuggestions` plugin
+- Remove zsh auto-start from `.bashrc` (if added by installer)
+
+### Clean Backups
+
+```bash
+clean-backups
+```
+
+Remove all `.zshrc.backup` and `.troll_themer.backup` files. Useful if you want to free up space without uninstalling.
+
 ## 📁 Project Structure
 
 ```
