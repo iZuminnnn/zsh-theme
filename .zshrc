@@ -30,10 +30,10 @@ zshaddhistory() {
     [[ -z "$first_word" ]] && return 0
     # Allow builtins, aliases, functions, and existing commands
     whence "$first_word" &>/dev/null && return 0
-    # Allow env var assignments (FOO=bar), sudo, and common prefixes
+    # Allow env var assignments (FOO=bar)
     [[ "$first_word" == *=* ]] && return 0
-    # Command not found — don't save
-    return 1
+    # Command not found — don't write to history file
+    return 2
 }
 
 # Load zsh-autosuggestions plugin
@@ -467,6 +467,8 @@ preexec() {
 }
 
 precmd() {
+    local _exit_code=$?
+
     PS1="%F{green}╭─$(time_icon)%f %F{red}%D{%H:%M:%S}%f %F{green}─%f %F{cyan}%n@%m %F{magenta}%~%f $(venv_info) $(git_info)
 %F{green}╰─➜  %f"
     
@@ -474,6 +476,14 @@ precmd() {
         local now=$(_zbt_timer_now)
         RPROMPT="%F{cyan}[$((now-timer))ms]%f"
         unset timer
+    fi
+
+    # Remove "command not found" (exit 127) from history file
+    if (( _exit_code == 127 )) && [[ -f "$HISTFILE" ]]; then
+        local _tmp_hist
+        _tmp_hist=$(mktemp)
+        sed '$d' "$HISTFILE" > "$_tmp_hist" && mv "$_tmp_hist" "$HISTFILE"
+        fc -R
     fi
     
     # Remove cpu_troll because it's time-consuming to process
