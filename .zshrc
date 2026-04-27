@@ -47,7 +47,7 @@ alias uninstall="uninstall_zsh_buddy"
 alias clean-backups="clean_backups"
 
 # Version for update checking
-ZSHRC_VERSION="1.2.1"
+ZSHRC_VERSION="1.3.0"
 THEME_NAME="Zsh Buddy Theme"
 troll_colors=(91 92 93 94 95 96) # red green yellow blue magenta cyan
 
