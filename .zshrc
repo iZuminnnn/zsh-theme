@@ -45,7 +45,7 @@ alias update="update_zshrc"
 alias update-history="fc -R"  # Reload history from file
 
 # Version for update checking
-ZSHRC_VERSION="1.1.1"
+ZSHRC_VERSION="1.2.0"
 THEME_NAME="Zsh Buddy Theme"
 troll_colors=(91 92 93 94 95 96) # red green yellow blue magenta cyan
 
