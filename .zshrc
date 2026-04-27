@@ -43,6 +43,8 @@ zshaddhistory() {
 alias update-zsh="source ~/.zshrc"
 alias update="update_zshrc"
 alias update-history="fc -R"  # Reload history from file
+alias uninstall="uninstall_zsh_buddy"
+alias clean-backups="clean_backups"
 
 # Version for update checking
 ZSHRC_VERSION="1.2.1"
@@ -330,6 +332,10 @@ update_zshrc() {
         echo -e "\e[92mNew version available: $remote_version (Current: $ZSHRC_VERSION)\e[0m"
         echo -e "Downloading update..."
         
+        # Clear old backups before creating new ones
+        rm -f ~/.zshrc.backup 2>/dev/null
+        rm -rf "$HOME/.troll_themer.backup" 2>/dev/null
+
         # Backup current files
         cp ~/.zshrc ~/.zshrc.backup
         echo -e "\e[93m📦 Backed up .zshrc to ~/.zshrc.backup\e[0m"
@@ -425,6 +431,84 @@ update_zshrc() {
             fi
         fi
     fi
+}
+
+# Uninstall theme and restore original shell config
+uninstall_zsh_buddy() {
+    echo -e "\e[93m⚠️  This will remove Zsh Buddy Theme and restore your previous config.\e[0m"
+    echo -e "Are you sure? (y/N)"
+    read -r response
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+        echo -e "\e[92mUninstall cancelled.\e[0m"
+        return 0
+    fi
+
+    echo -e "\e[96m🔄 Uninstalling Zsh Buddy Theme...\e[0m"
+
+    # Restore .zshrc from backup if available
+    if [[ -f "$HOME/.zshrc.backup" ]]; then
+        cp "$HOME/.zshrc.backup" "$HOME/.zshrc"
+        echo -e "\e[92m✅ Restored .zshrc from backup\e[0m"
+    else
+        rm -f "$HOME/.zshrc"
+        echo -e "\e[93m⚠️  No .zshrc backup found — removed .zshrc\e[0m"
+    fi
+
+    # Remove theme data
+    rm -rf "$HOME/.troll_themer" 2>/dev/null && echo -e "\e[92m✅ Removed ~/.troll_themer/\e[0m"
+    rm -rf "$HOME/.troll_themer.backup" 2>/dev/null
+
+    # Remove zsh-autosuggestions plugin
+    rm -rf "$HOME/.zsh/zsh-autosuggestions" 2>/dev/null && echo -e "\e[92m✅ Removed zsh-autosuggestions plugin\e[0m"
+    # Remove .zsh dir if empty
+    rmdir "$HOME/.zsh" 2>/dev/null
+
+    # Clean all backups
+    rm -f "$HOME"/.zshrc.backup* 2>/dev/null && echo -e "\e[92m✅ Removed all .zshrc backups\e[0m"
+
+    # Remove auto-start from .bashrc if present
+    if grep -q "zsh-buddy-theme installer" "$HOME/.bashrc" 2>/dev/null; then
+        local tmp_bashrc=$(mktemp)
+        grep -v "zsh-buddy-theme installer\|exec zsh" "$HOME/.bashrc" | sed '/^$/N;/^\n$/d' > "$tmp_bashrc" && mv "$tmp_bashrc" "$HOME/.bashrc"
+        echo -e "\e[92m✅ Removed zsh auto-start from .bashrc\e[0m"
+    fi
+
+    echo ""
+    echo -e "\e[92m🎉 Zsh Buddy Theme has been uninstalled.\e[0m"
+    echo -e "Restart your terminal to apply changes."
+}
+
+# Remove all .zshrc backup files
+clean_backups() {
+    local count=0
+    local files=("$HOME"/.zshrc.backup*(N))
+    count=${#files[@]}
+
+    # Also check .troll_themer.backup
+    local has_themer_backup=false
+    [[ -d "$HOME/.troll_themer.backup" ]] && has_themer_backup=true
+
+    if (( count == 0 )) && [[ "$has_themer_backup" == false ]]; then
+        echo -e "\e[92mNo backup files found.\e[0m"
+        return 0
+    fi
+
+    echo -e "\e[93mFound backups:\e[0m"
+    for f in "${files[@]}"; do
+        echo -e "  📦 $f"
+    done
+    [[ "$has_themer_backup" == true ]] && echo -e "  📦 $HOME/.troll_themer.backup/"
+
+    echo -e "\e[93mRemove all? (y/N)\e[0m"
+    read -r response
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+        echo -e "\e[92mCancelled.\e[0m"
+        return 0
+    fi
+
+    rm -f "$HOME"/.zshrc.backup* 2>/dev/null
+    rm -rf "$HOME/.troll_themer.backup" 2>/dev/null
+    echo -e "\e[92m✅ All backups removed.\e[0m"
 }
 
 # Add alias for easier updating
