@@ -18,8 +18,31 @@ Your coding buddy — a motivational Zsh theme with work-life balance reminders,
 - 💬 **70+ contextual messages** for different times and commands
 
 ## 🚀 Quick Start
-**Note: you need download zsh first:** https://packages.msys2.org/packages/zsh
-1. **Create .zshrc:**
+
+### One-Line Install (Recommended)
+
+```bash
+bash <(curl -sf https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/install.sh)
+```
+
+The installer will automatically:
+- Detect your OS (macOS / Linux / WSL / Windows)
+- Install Zsh if not present
+- Download all theme files
+- Install Nerd Font
+- Set Zsh as default shell
+
+### Manual Install
+
+<details>
+<summary>Click to expand manual installation steps</summary>
+
+1. **Install Zsh** (if not already installed):
+   - macOS: `brew install zsh`
+   - Ubuntu/Debian: `sudo apt install zsh`
+   - Windows (MSYS2): https://packages.msys2.org/packages/zsh
+
+2. **Download theme files:**
    ```bash
    curl -sf -o ~/.zshrc https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.zshrc && mkdir -p "$HOME/.troll_themer/lang"
    ```
@@ -27,26 +50,17 @@ Your coding buddy — a motivational Zsh theme with work-life balance reminders,
    curl -sf -o "$HOME/.troll_themer/config" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/config
    ```
    ```bash
-   touch "$HOME/.troll_themer/lang/vi.txt" && touch "$HOME/.troll_themer/lang/en.txt" && curl -sf -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/vi.txt && curl -sf -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/en.txt
+   curl -sf -o "$HOME/.troll_themer/lang/vi.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/vi.txt && curl -sf -o "$HOME/.troll_themer/lang/en.txt" https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/.troll_themer/lang/en.txt
    ```
-2. **Source the theme:**
-   ```bash
-   source .zshrc
-   ```
-3. ** Set zsh auto run when open terminal:**
-    - Open bashrc file
-       ```bash
-      nano ~/.bashrc
-      ```
-    - Add it
-      ```bash
-      if [ -t 1 ]; then
-        exec zsh
-      fi
-      ```
-4. **Enjoy the trolling!** 🎉
 
-The theme will automatically create the necessary configuration files and language packs on first run.
+3. **Set Zsh as default and restart terminal:**
+   ```bash
+   chsh -s $(which zsh)
+   ```
+
+</details>
+
+After installation, restart your terminal and enjoy! 🎉
 
 ## 🌍 Language Configuration
 
@@ -122,6 +136,7 @@ zsh-buddy-theme/
 │       ├── vi.txt           # Vietnamese messages
 │       └── en.txt           # English messages
 ├── version.txt              # Theme version
+├── install.sh               # One-line installer script
 ├── preview.png              # Theme preview screenshot
 ├── LICENSE                  # MIT License file
 └── README.md                # This documentation
