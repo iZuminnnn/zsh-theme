@@ -231,6 +231,29 @@ set_default_shell() {
     esac
 }
 
+# Install zsh-autosuggestions plugin
+install_autosuggestions() {
+    local plugin_dir="$HOME/.zsh/zsh-autosuggestions"
+
+    if [[ -d "$plugin_dir" ]]; then
+        print_ok "zsh-autosuggestions already installed"
+        return 0
+    fi
+
+    print_step "Installing zsh-autosuggestions plugin..."
+
+    if has_cmd git; then
+        mkdir -p "$HOME/.zsh"
+        if git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions "$plugin_dir" 2>/dev/null; then
+            print_ok "zsh-autosuggestions installed"
+        else
+            print_warn "Failed to clone zsh-autosuggestions (optional)"
+        fi
+    else
+        print_warn "Git not found — skipping zsh-autosuggestions (install git and re-run)"
+    fi
+}
+
 # Main
 main() {
     echo ""
@@ -252,6 +275,7 @@ main() {
     backup_zshrc
     download_theme
     install_font
+    install_autosuggestions
     set_default_shell
 
     echo ""

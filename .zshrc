@@ -23,6 +23,22 @@ setopt HIST_FIND_NO_DUPS     # Don't display duplicates when searching
 setopt HIST_SAVE_BY_COPY     # Save history by copying instead of moving
 setopt HIST_FCNTL_LOCK       # Use file locking for history file
 
+# Skip "command not found" from history
+zshaddhistory() {
+    local cmd="${1%$'\n'}"
+    local first_word="${${(z)cmd}[1]}"
+    [[ -z "$first_word" ]] && return 0
+    # Allow builtins, aliases, functions, and existing commands
+    whence "$first_word" &>/dev/null && return 0
+    # Allow env var assignments (FOO=bar), sudo, and common prefixes
+    [[ "$first_word" == *=* ]] && return 0
+    # Command not found — don't save
+    return 1
+}
+
+# Load zsh-autosuggestions plugin
+[[ -f "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] && source "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
+
 # Aliases for manual updates
 alias update-zsh="source ~/.zshrc"
 alias update="update_zshrc"
