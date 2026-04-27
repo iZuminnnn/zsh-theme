@@ -35,13 +35,13 @@ troll_colors=(91 92 93 94 95 96) # red green yellow blue magenta cyan
 
 # Detect nanosecond support (GNU date has %N, macOS BSD date does not)
 _zbt_has_nanoseconds=false
-if [[ "$(date +%N 2>/dev/null)" != "%N" && "$(date +%N 2>/dev/null)" != "N" ]]; then
+if [[ "$(date +%N 2>/dev/null)" =~ ^[0-9]+$ ]]; then
     _zbt_has_nanoseconds=true
 fi
 
 _zbt_timer_now() {
     if [[ "$_zbt_has_nanoseconds" == true ]]; then
-        echo $(( $(date +%s%0N) / 1000000 ))
+        echo $(( $(date +%s%N) / 1000000 ))
     else
         echo $(( $(date +%s) * 1000 ))
     fi
