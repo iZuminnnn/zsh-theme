@@ -2,10 +2,6 @@
 # A dynamic, humorous Vietnamese developer-focused Zsh theme
 # Repository: https://github.com/hieudnm/zsh-buddy-theme
 
-if [[ "$PAGER" == "head -n 10000 | cat" || "$COMPOSER_NO_INTERACTION" == "1" ]]; then
-  return
-fi
-
 # History configuration
 HISTFILE=$HOME/.zhistory
 HISTSIZE=10000
