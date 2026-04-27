@@ -4,7 +4,7 @@ Your coding buddy — a motivational Zsh theme with work-life balance reminders,
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Zsh Version](https://img.shields.io/badge/Zsh-5.0%2B-brightgreen)](https://www.zsh.org/)
-[![Version](https://img.shields.io/badge/Version-1.0.1-orange)](https://github.com/hieudnm/zsh-buddy-theme)
+[![Version](https://img.shields.io/badge/Version-1.1.0-orange)](https://github.com/hieudnm/zsh-buddy-theme)
 
 ## ✨ Features
 
@@ -122,6 +122,7 @@ zsh-buddy-theme/
 │       ├── vi.txt           # Vietnamese messages
 │       └── en.txt           # English messages
 ├── version.txt              # Theme version
+├── preview.png              # Theme preview screenshot
 ├── LICENSE                  # MIT License file
 └── README.md                # This documentation
 ```
@@ -164,19 +165,7 @@ Git, Docker, npm, yarn, Python, pip, system commands (ls, cd, mv, cp, rm), text 
 
 ## 🎨 Theme Preview
 
-```bash
-🎉 Welcome to Zsh Buddy Theme! Chúc người đẹp một ngày mới tràn đầy năng lượng nhé! Happy coding😘
-Repository mới: https://github.com/hieudnm/zsh-buddy-theme
-🖥️  Windows (Git Bash)
-Cà phê sáng chưa? Hay vẫn đang nạp caffeine bằng stackoverflow?
-
-╭─🌞 user@machine ~/projects/zsh-buddy-theme 🌿(main)
-╰─➜ git commit -m "Add new feature"
-Commit xong rồi thì nhớ push người đẹp!                                   120ms
-
-╭─🌞 user@machine ~/projects/zsh-buddy-theme 🌿(main)
-╰─➜ 
-```
+![Zsh Buddy Theme Preview](preview.png)
 
 ## ⚙️ Configuration Options
 
