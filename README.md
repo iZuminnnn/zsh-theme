@@ -4,7 +4,7 @@ Your coding buddy — a motivational Zsh theme with work-life balance reminders,
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Zsh Version](https://img.shields.io/badge/Zsh-5.0%2B-brightgreen)](https://www.zsh.org/)
-[![Version](https://img.shields.io/badge/Version-1.2.1-orange)](https://github.com/hieudnm/zsh-buddy-theme)
+[![Version](https://img.shields.io/badge/Version-1.3.0-orange)](https://github.com/hieudnm/zsh-buddy-theme)
 
 ## ✨ Features
 
@@ -122,6 +122,27 @@ $ troll
 $ git push
 Push thành công rồi, nghỉ xíu uống miếng nước người đẹp!
 ```
+
+## 🗑️ Uninstall
+
+```bash
+uninstall
+```
+
+The uninstaller will:
+- Restore your previous `.zshrc` from backup (if available)
+- If no backup exists, extract and keep your custom config (PATH, aliases, exports added after `ZSH_BUDDY_THEME_END`)
+- Remove `~/.troll_themer/` and all backups
+- Remove `zsh-autosuggestions` plugin
+- Remove zsh auto-start from `.bashrc` (if added by installer)
+
+### Clean Backups
+
+```bash
+clean-backups
+```
+
+Remove all `.zshrc.backup` and `.troll_themer.backup` files. Useful if you want to free up space without uninstalling.
 
 ## 📁 Project Structure
 
