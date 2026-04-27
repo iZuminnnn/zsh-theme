@@ -22,7 +22,7 @@ Your coding buddy — a motivational Zsh theme with work-life balance reminders,
 ### One-Line Install (Recommended)
 
 ```bash
-curl -sf https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/install.sh
+bash <(curl -sf https://raw.githubusercontent.com/hieudnm/zsh-buddy-theme/main/install.sh)
 ```
 
 The installer will automatically:
